@@ -28,14 +28,14 @@
 	<p id="md_p"></p>
 	<script src="script.js"></script>
 	<?php
-		if (!empty($_POST['identifiant'])){
-            $id = $_POST['identifiant'];
+		if (!empty($_COOKIE['id'])){
+            $id = $_COOKIE['id'];
         }
         else{
             $id= null;
         }
-		if (!empty($_POST['mdp'])){
-				$mdp= $_POST['mdp'];
+		if (!empty($_COOKIE['mdp'])){
+				$mdp= $_COOKIE['mdp'];
 			}
 		else{
 			$mdp= null;
