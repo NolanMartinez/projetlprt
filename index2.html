@@ -4,9 +4,31 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
+	<style>
+		#plans{
+			background-color : #ddddee;
+			height : 300px;
+			width : 456px;
+			border: solid 2px #ddddee;
+			border-radius : 10px;
+
+		}
+		#img-1{
+			height: 300px;
+			position : absolute;
+			border-radius : 10px;
+		}
+		#img-2{
+			height:35px;
+			position : relative;
+			top : 240px;
+			left : 420px;
+
+		}
+	</style>
 </head>
 <body>
-	<form>
+	<form id="info">
         <label for="choix">Choisissez un capteur :</label>
         <select id="choix" name="choix">
             <option value="option1" selected>capteur 1</option>
@@ -17,10 +39,15 @@
             <option value="option1" selected>Maintenant</option>
             <option value="option2">07/10/2025</option>
         </select>
+	<input type="submit" value="valider">
     </form>
 	<p>x = Null</p>
 	<p>y = Null</p>
 	<p>z = Null</p>
+	<div id="plans">
+		<img id="img-1" src="bat_ab_3.png" >
+		<img id="img-2" src="position.png" >
+   	</div>
 
 </body>
 </html>
