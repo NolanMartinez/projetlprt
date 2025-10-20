@@ -1,0 +1,33 @@
+body{
+    display: flex;
+	justify-content : center;
+    
+}
+.cachee{
+	visibility: collapse;
+}
+#erreur {
+    visibility: visible;
+    color : red;
+    background-color: pink;
+    height : 50px;
+	width : 230px;
+    padding-left: 20px;
+    line-height: 50px;
+    position: relative;
+}
+#identification{
+    background-color: rgb(198, 219, 219);
+    height : auto;
+	width : 500px;
+    text-align : center;
+    margin: auto;
+    border-radius : 20px;
+}
+.text{
+    width: 250px;
+}
+.bouton-connection{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

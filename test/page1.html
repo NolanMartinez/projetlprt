@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<title>page</title>
+		<style>
+			body {
+				background-color : #eeddee;
+				color : #003300;
+				display: flex;
+				justify-content : center;
+				height : 90%;
+			}
+			#corp{	
+				background-color : #ffffff;
+				width : 600px;
+				border-radius : 20px;
+				text-align : center;
+				height : max-content;
+				margin : 2%;
+				border: solid 12px #ffffff;
+			}
+			#plans{
+				text-align : left;
+				background-color : #ddddee;
+				height : 300px;
+				width : 455px;
+				border: solid 2px #ddddee;
+				border-radius : 10px;
+				margin : auto;
+				
+			}
+			#img-1{
+				height: 300px;
+				width : 455px;
+				position : absolute;
+				border-radius : 10px;
+			}
+			#img-2{
+				height:34px;
+				width : 16px;
+				position : relative;
+				top : 240px;
+				left : 420px;
+			}
+			.flex{
+				display: flex;
+				justify-content : center;
+			}
+			.centre{
+				margin : auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="corp">
+			<form id="info">
+        			<label for="choix">Choisissez un capteur :</label>
+        			<select id="choix" name="choix">
+            				<option value="option1" selected>capteur 1</option>
+            				<option value="option2">capteur 2</option>
+        			</select>
+				<label for="choix">Choisissez une date :</label>
+        			<select id="choix" name="choix">
+        		    		<option value="option1" selected>Maintenant</option>
+        		    		<option value="option2">07/10/2025</option>
+        			</select>
+				<input type="submit" value="valider">
+	    		</form>
+			<div class="flex">
+				<p class="centre">x = Null</p>
+				<p class="centre">y = Null</p>
+				<p class="centre">z = Null</p>
+			</div>
+			<br>
+			<div id="plans">
+				<img id="img-1" src="bat_ab_3.png" >
+				<img id="img-2" src="position.png" >
+   			</div>
+		</div>	
+	</body>
+</html>

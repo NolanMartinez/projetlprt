@@ -1,0 +1,35 @@
+body{
+    display: flex;
+    justify-content: center;
+}
+#plans{
+			background-color : #ddddee;
+			height : 589px;
+			width : 600px;
+			border: solid 2px #ddddee;
+			border-radius : 10px;
+
+		}
+#img-1{
+    width: 600px;
+    height: 589px;
+    position : absolute;
+    border-radius : 10px;
+}
+#img-2{
+    height: 36px;
+    width: 16px;
+    position : relative;
+
+}
+#utilisateur{
+    width: 100%;
+    text-align: right;
+    position : absolute;
+    width: 100px;
+    margin-left: calc(100% - 120px);
+}
+.corp{
+    width: 700px;
+    margin: auto;
+}
