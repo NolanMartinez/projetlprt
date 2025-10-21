@@ -123,13 +123,13 @@
         while ($row = pg_fetch_row($sql)) {
             $x = $row[2];
             $y = $row[3];        
-            /*echo '<p>x = ';
+            echo '<div class="donnees"><p class="coordonnees">x = ';
             echo $row[2];
             echo '</p>';
 
-            echo '<p>y = ';
+            echo '<p class="coordonnees">y = ';
             echo $row[3];
-            echo '</p>';*/
+            echo '</p></div>';
             
         }
         ?>
@@ -141,6 +141,15 @@
             crossorigin=""
         ></script>
     <script src="script_test.js"></script>
+    <script>
+        <?php
+            echo 'var marker = L.marker([';
+            echo $x;
+            echo ', ';
+            echo $y;
+            echo ']).addTo(map);';
+        ?>
+    </script>
     </div>
 </body>
 </html>

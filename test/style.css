@@ -30,6 +30,18 @@ body{
     margin-left: calc(100% - 120px);
 }
 .corp{
-    width: 700px;
+    width: 600px;
     margin: auto;
+}
+.donnees{
+    display: flex;
+    justify-content: center;
+}
+.coordonnees{
+ margin-left: 50px;
+ margin-right: 50px;
+}
+#map{
+    border-radius: 10px;
+    border: #ddddee solid 5px;
 }

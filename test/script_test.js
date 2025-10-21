@@ -10,6 +10,3 @@ var Stadia_OSMBright = L.tileLayer(
 );
 
 Stadia_OSMBright.addTo(map);
-
-var marker = L.marker([48.856614, 2.3522219]).addTo(map);
-var marker = L.marker([50.36336728031363, 3.517169812090994]).addTo(map);

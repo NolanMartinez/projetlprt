@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <style>
+        #map {
+            height: 600px;
+            width: 600px;
+            flex: 1;
+        }
+    </style>
 </head>
 <body>
     <script src="script_page.js"></script>
@@ -113,32 +123,33 @@
         while ($row = pg_fetch_row($sql)) {
             $x = $row[2];
             $y = $row[3];        
-            /*echo '<p>x = ';
+            echo '<div class="donnees"><p class="coordonnees">x = ';
             echo $row[2];
             echo '</p>';
 
-            echo '<p>y = ';
+            echo '<p class="coordonnees">y = ';
             echo $row[3];
-            echo '</p>';*/
+            echo '</p></div>';
             
         }
         ?>
-        <style>
-            #img-2{
-                <?php
-                echo 'top : calc(';
-                echo $y;
-                echo 'px - 36px);';
-                echo 'left : calc(';
-                echo $x;
-                echo 'px - 8px);';
-                ?>
-            }
         </style>
-        <div id="plans">
-        <img id="img-1" src="Carte_France_geo_dep.png" >
-        <img id="img-2" src="position.png" >
-        </div>
+        <div id="map"></div>
+        <script
+            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""
+        ></script>
+    <script src="script_test.js"></script>
+    <script>
+        <?php
+            echo 'var marker = L.marker([';
+            echo $x;
+            echo ', ';
+            echo $y;
+            echo ']).addTo(map);';
+        ?>
+    </script>
     </div>
 </body>
 </html>
