@@ -5,6 +5,7 @@ body{
 }
 .cachee{
 	visibility: collapse;
+    width: 0px;
 }
 #erreur {
     visibility: visible;

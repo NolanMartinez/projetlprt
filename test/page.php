@@ -8,15 +8,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
-    <style>
-        #map {
-            height: 600px;
-            width: 600px;
-            flex: 1;
-        }
-    </style>
 </head>
-<body>
+<body >
     <script src="script_page.js"></script>
     <?php
         if (!empty($_POST['capteur'])){
@@ -109,6 +102,12 @@
                     echo $row[5];
                     echo '</option>';
                 }
+                if ($id_date == "tout") {
+                    echo '<option value="tout" selected>Tous les capteur</option>';
+                }
+                else{
+                    echo '<option value="tout">Tous les capteur</option>';
+                }
                 ?>
             </select>
             <input type="submit" value="valider">
@@ -116,6 +115,9 @@
         <?php
         if ($id_date == 'defaut'){
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
+        }
+        elseif($id_date == "tout"){
+            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
         }
         else{
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
@@ -143,12 +145,35 @@
     <script src="script_test.js"></script>
     <script>
         <?php
+        if ($id_date == 'defaut' or $id_date == "tout"){
+            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
+        }
+        else{
+            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
+        }
+        while ($row = pg_fetch_row($sql)) {
             echo 'var marker = L.marker([';
-            echo $x;
+            echo $row[2];
             echo ', ';
-            echo $y;
+            echo $row[3];
             echo ']).addTo(map);';
+        }
         ?>
+        var polyline = L.polyline([
+            <?php
+                if ($id_date == "tout"){
+                    $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
+        
+                    while ($row = pg_fetch_row($sql)) {
+                        echo '[';
+                        echo $row[2];
+                        echo ', ';
+                        echo $row[3];
+                        echo '],';
+                    }
+                }
+        ?>
+        ]).addTo(map);
     </script>
     </div>
 </body>

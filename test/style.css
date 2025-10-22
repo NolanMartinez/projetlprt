@@ -44,4 +44,10 @@ body{
 #map{
     border-radius: 10px;
     border: #ddddee solid 5px;
+    height: 600px;
+    width: 600px;
+    flex: 1;
+}
+.map_mobile{
+    border: aqua solid 50px;
 }
