@@ -8,15 +8,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
-    <style>
-        #map {
-            height: 600px;
-            width: 600px;
-            flex: 1;
-        }
-    </style>
 </head>
-<body>
+<body >
     <script src="script_page.js"></script>
     <?php
         if (!empty($_POST['capteur'])){
@@ -109,31 +102,20 @@
                     echo $row[5];
                     echo '</option>';
                 }
+                if ($id_date == "tout") {
+                    echo '<option value="tout" selected>Tous les capteur</option>';
+                }
+                else{
+                    echo '<option value="tout">Tous les capteur</option>';
+                }
                 ?>
             </select>
             <input type="submit" value="valider">
         </form>
-        <?php
-        if ($id_date == 'defaut'){
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
-        }
-        else{
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
-        }
-        while ($row = pg_fetch_row($sql)) {
-            $x = $row[2];
-            $y = $row[3];        
-            echo '<div class="donnees"><p class="coordonnees">x = ';
-            echo $row[2];
-            echo '</p>';
-
-            echo '<p class="coordonnees">y = ';
-            echo $row[3];
-            echo '</p></div>';
-            
-        }
-        ?>
-        </style>
+        <div class="donnees">
+            <p class="coordonnees" id="x">x = </p>
+            <p class="coordonnees" id="y">y = </p>
+        </div>
         <div id="map"></div>
         <script
             src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
@@ -141,15 +123,6 @@
             crossorigin=""
         ></script>
     <script src="script_test.js"></script>
-    <script>
-        <?php
-            echo 'var marker = L.marker([';
-            echo $x;
-            echo ', ';
-            echo $y;
-            echo ']).addTo(map);';
-        ?>
-    </script>
     </div>
 </body>
 </html>

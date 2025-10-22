@@ -142,7 +142,7 @@
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""
         ></script>
-    <script src="script_test.js"></script>
+    <script src="script_maps.js"></script>
     <script>
         <?php
         if ($id_date == 'defaut' or $id_date == "tout"){
