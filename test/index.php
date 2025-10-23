@@ -1,64 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
-	<link rel="stylesheet" href="style_index.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Projet GPS</title>
+    <link rel="stylesheet" href="style_index.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-	<form method="post" id="identification">
-		<div id="erreur">
-			<p>Mauvais identifiant/mot de passe.</p>
-		</div>
-		<label for="identifiant">
-			<p>Identifiant :</p> 
-			<input type="text" name="identifiant" id="identifiant" class="text">
-		</label>
-		<br>
-		<label for="mdp">
-			<p>Mot de passe :</p> 
-			<input type="password" name="mdp" id="mdp" class="text">
-		</label>
-		<br>
-		<input type="button" value="Se connecter" class="bouton-connection" onclick="Affiche()">
-	</form>
-	<div class="cachee">
-	<p id="id"></p>
-	<p id="md_p"></p>
-	<script src="script.js"></script>
-	<?php
-		if (!empty($_COOKIE['id'])){
-            $id = $_COOKIE['id'];
-        }
-        else{
-            $id= null;
-        }
-		if (!empty($_COOKIE['mdp'])){
-				$mdp= $_COOKIE['mdp'];
-			}
-		else{
-			$mdp= null;
-		}
-		if ($id){
-			$db_connection = pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
-			if (!$db_connection) {
-				echo "l'identifiant ou le mot de passe incorect";
-				exit;
-			}
-			else{
-				$url = 'page.php';
-				header('Location: '.$url);
-				exit;
-			}
-		}
-    ?>
-	</div>
-	<style>
-		#erreur {
-			visibility: collapse;
-			height : 0px;
-		}
-	</style>
+    <div class="login-container">
+        <form method="post" id="identification">
+            <?php
+                $erreur = false;
+                $id = !empty($_COOKIE['id']) ? $_COOKIE['id'] : null;
+                $mdp = !empty($_COOKIE['mdp']) ? $_COOKIE['mdp'] : null;
+                if ($id !== null && $mdp !== null) {
+                    $db_connection = @pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+                    
+                    if (!$db_connection) {
+                        $erreur = true;
+                    } else {
+                        header('Location: page.php');
+                        exit;
+                    }
+                }
+            ?>
+
+            <div id="erreur" class="<?php echo $erreur ? 'show' : ''; ?>">
+                <p>Mauvais identifiant/mot de passe.</p>
+            </div>
+
+            <div class="form-group">
+                <label for="identifiant">Identifiant :</label>
+                <input type="text" name="identifiant" id="identifiant" class="text" placeholder="Entrez votre identifiant" required>
+            </div>
+
+            <div class="form-group">
+                <label for="mdp">Mot de passe :</label>
+                <input type="password" name="mdp" id="mdp" class="text" placeholder="Entrez votre mot de passe" required>
+            </div>
+
+            <input type="button" value="Se connecter" class="bouton-connection" onclick="Affiche()">
+        </form>
+    </div>
+
+    <div class="cachee">
+        <p id="id"></p>
+        <p id="md_p"></p>
+        <script src="script.js"></script>
+    </div>
 </body>
 </html>
