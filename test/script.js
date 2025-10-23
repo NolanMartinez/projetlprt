@@ -7,8 +7,7 @@ function Affiche() {
         return;
     }
 
-    document.getElementById("id").innerHTML = "Identifiant : " + identifiant;
-    document.getElementById("md_p").innerHTML = "Mot de passe : " + mdp;
+
     document.cookie = "id=" + encodeURIComponent(identifiant);
     document.cookie = "mdp=" + encodeURIComponent(mdp);
 

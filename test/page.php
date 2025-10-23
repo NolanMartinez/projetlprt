@@ -110,7 +110,7 @@
                 }
                 ?>
             </select>
-            <input type="submit" value="valider">
+            <input type="submit" value="Réinitialiser">
         </form>
         <?php
         if ($id_date == 'defaut'){

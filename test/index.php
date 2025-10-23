@@ -43,11 +43,6 @@
             <input type="button" value="Se connecter" class="bouton-connection" onclick="Affiche()">
         </form>
     </div>
-
-    <div class="cachee">
-        <p id="id"></p>
-        <p id="md_p"></p>
         <script src="script.js"></script>
-    </div>
 </body>
 </html>
