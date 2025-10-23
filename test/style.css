@@ -138,7 +138,22 @@ body {
     border-top: 5px solid #ddddee;
     border-radius: 0 0 20px 20px;
 }
+#reset {
+    background: linear-gradient(135deg, #2a5298, #1e3c72);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
 
+#reset:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
+}
 @keyframes fadeInUp {
     from {
         opacity: 0;
