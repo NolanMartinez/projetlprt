@@ -12,6 +12,6 @@ var Stadia_OSMBright = L.tileLayer(
 Stadia_OSMBright.addTo(map);
 
 function onMapClick(e) {
-    document.getElementById("x").innerHTML = "x = "+ e.lng.toString() ;
+    document.getElementById("x").innerHTML = "x = "+ e.latlng ;
 }
 map.on('click', onMapClick);

@@ -18,7 +18,7 @@
         else{
             $id_cap = "1";
         }
-                if (!empty($_POST['date'])){
+        if (!empty($_POST['date'])){
             $id_date = $_POST['date'];
         }
         else{
@@ -123,14 +123,14 @@
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
         }
         while ($row = pg_fetch_row($sql)) {
-            $x = $row[2];
-            $y = $row[3];        
+            $x = $row[3];
+            $y = $row[2];        
             echo '<div class="donnees"><p class="coordonnees">x = ';
-            echo $row[2];
+            echo $row[3];
             echo '</p>';
 
             echo '<p class="coordonnees">y = ';
-            echo $row[3];
+            echo $row[2];
             echo '</p></div>';
             
         }
@@ -153,9 +153,9 @@
         }
         while ($row = pg_fetch_row($sql)) {
             echo 'var marker = L.marker([';
-            echo $row[2];
-            echo ', ';
             echo $row[3];
+            echo ', ';
+            echo $row[2];
             echo ']).addTo(map);';
         }
         ?>
@@ -166,9 +166,9 @@
         
                     while ($row = pg_fetch_row($sql)) {
                         echo '[';
-                        echo $row[2];
-                        echo ', ';
                         echo $row[3];
+                        echo ', ';
+                        echo $row[2];
                         echo '],';
                     }
                 }
