@@ -8,49 +8,48 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <?php
-        session_start();
-        $erreur = false;
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $identifiant = trim($_POST['identifiant'] ?? '');
-            $mdp = trim($_POST['mdp'] ?? '');
-
-            if ($identifiant === 'admin' && $mdp === 'admin') {
-                $_SESSION['user'] = 'admin';
-                header('Location: page.php');
-                exit;
-            } else {
-                $erreur = true;
-            }
-        }
-
-        if (!empty($_SESSION['user'])) {
-            header('Location: page.php');
-            exit;
-        }
-    ?>
-
     <div class="login-container">
         <form method="post" id="identification">
+            <?php
+				session_start();
+                $erreur = false;
+                if ($_POST && !empty($_POST['identifiant']) && !empty($_POST['mdp'])) {
+           			$id = trim($_POST['identifiant']);
+            		$mdp = trim($_POST['mdp']);
+                    $db_connection = @pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+                    
+                    if (!$db_connection) {
+                        $_SESSION['user'] = $id;
+                		header('Location: page.php');
+                		exit;
+            			} else {
+                		$erreur = true;
+            			}
+				}
+
+				if (!empty($_SESSION['user'])) {
+            		header('Location: page.php');
+            		exit;
+                }
+            ?>
+
             <div id="erreur" class="<?php echo $erreur ? 'show' : ''; ?>">
                 <p>Mauvais identifiant/mot de passe.</p>
             </div>
 
             <div class="form-group">
                 <label for="identifiant">Identifiant :</label>
-                <input type="text" name="identifiant" id="identifiant" class="text" 
-                       placeholder="Entrez votre identifiant" value="admin" required>
+                <input type="text" name="identifiant" id="identifiant" class="text" placeholder="Entrez votre identifiant" required>
             </div>
 
             <div class="form-group">
                 <label for="mdp">Mot de passe :</label>
-                <input type="password" name="mdp" id="mdp" class="text" 
-                       placeholder="Entrez votre mot de passe" required>
+                <input type="password" name="mdp" id="mdp" class="text" placeholder="Entrez votre mot de passe" required>
             </div>
 
-            <input type="submit" value="Se connecter" class="bouton-connection">
+            <input type="button" value="Se connecter" class="bouton-connection" onclick="Affiche()">
         </form>
     </div>
+        <script src="script.js"></script>
 </body>
 </html>
