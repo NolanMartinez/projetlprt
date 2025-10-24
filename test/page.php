@@ -34,6 +34,7 @@
 		}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 		session_start();
         if (empty($_SESSION['user'])) {
             header('Location: index.php');
@@ -48,6 +49,8 @@
 =======
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
+=======
+>>>>>>> parent of 67b6c05 (a supprimer)
 		if (!empty($_COOKIE['mdp'])){
 				$mdp= $_COOKIE['mdp'];
 			}
@@ -59,6 +62,9 @@
             echo "An error occurred.\n";
         exit;
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 67b6c05 (a supprimer)
+=======
 >>>>>>> parent of 67b6c05 (a supprimer)
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)

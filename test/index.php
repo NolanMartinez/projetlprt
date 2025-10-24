@@ -13,6 +13,7 @@
             <?php
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 				session_start();
                 $erreur = false;
                 if ($_POST && !empty($_POST['identifiant']) && !empty($_POST['mdp'])) {
@@ -35,6 +36,8 @@
 =======
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
+=======
+>>>>>>> parent of 67b6c05 (a supprimer)
                 $erreur = false;
                 $id = !empty($_COOKIE['id']) ? $_COOKIE['id'] : null;
                 $mdp = !empty($_COOKIE['mdp']) ? $_COOKIE['mdp'] : null;
@@ -48,6 +51,9 @@
                         exit;
                     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 67b6c05 (a supprimer)
+=======
 >>>>>>> parent of 67b6c05 (a supprimer)
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
