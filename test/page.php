@@ -94,6 +94,8 @@
                 exit;
                 }
                 while ($row = pg_fetch_row($sql_date)) {
+                    $date = $row[5];
+                    $date_form = date('j/n/y', strtotime($date));
                     if ($row[0] == $id_date){
                         echo '<option selected value="';
                     }
@@ -102,7 +104,7 @@
                     }
                     echo $row[0];
                     echo '">';
-                    echo $row[5];
+                    echo $date_form;
                     echo '</option>';
                 }
                 if ($id_date == "tout") {
