@@ -81,52 +81,13 @@
                 }
                 ?>
             </select>
-<<<<<<< HEAD
             <input type="submit" value="Ajouter">
             <input type="button" id="reset" value="Réinitialiser">
-        
-            <div class="donnees">
-                <p class="coordonnees" id="x">Cliquer sur</p>
-                <p class="coordonnees" id="y">la carte</p>
-            </div>
-        </form>
-=======
-            <label for="date">Choisissez une date :</label>
-            <select id="date" name="date" onchange="envoie()">
-                <option value="defaut">Maintenant</option>
-                <?php
-                $sql_date = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap'");
-                if (!$sql_date) {
-                    echo "An error occurred.\n";
-                exit;
-                }
-                while ($row = pg_fetch_row($sql_date)) {
-                    if ($row[0] == $id_date){
-                        echo '<option selected value="';
-                    }
-                    else{
-                        echo '<option value="';
-                    }
-                    echo $row[0];
-                    echo '">';
-                    echo $row[5];
-                    echo '</option>';
-                }
-                if ($id_date == "tout") {
-                    echo '<option value="tout" selected>Tous les capteur</option>';
-                }
-                else{
-                    echo '<option value="tout">Tous les capteur</option>';
-                }
-                ?>
-            </select>
-            <input type="submit" value="valider">
         </form>
         <div class="donnees">
-            <p class="coordonnees" id="x">x = </p>
-            <p class="coordonnees" id="y">y = </p>
+            <p class="coordonnees" id="x">Cliquer sur</p>
+            <p class="coordonnees" id="y">la carte</p>
         </div>
->>>>>>> parent of 558fc12 (page_test.php afficher données cliquée)
         <div id="map"></div>
         <script
             src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
