@@ -1,0 +1,11 @@
+.zone_coordonnes{
+    visibility: collapse;
+}
+.label_coordonnes{
+    font-size: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+#reset{
+    position: relative;
+}
