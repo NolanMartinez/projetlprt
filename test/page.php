@@ -1,44 +1,57 @@
-<?php
-session_start();
-
-if (empty($_SESSION['user']) || $_SESSION['user'] !== 'admin') {
-    header('Location: index.php');
-    exit;
-}
-
-$id = $_SESSION['user'];
-
-$db_connection = @pg_connect("
-    host=10.59.164.226 
-    port=5432 
-    dbname=projet_gps 
-    user=admin
-    password=admin
-");
-
-if (!$db_connection) {
-    die("Erreur : impossible de se connecter à la base de données.");
-}
-?>
-
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projet GPS - Carte</title>
+    <title>Document</title>
     <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
 </head>
-<body>
+<body >
     <script src="script_page.js"></script>
-
+    <?php
+        if (!empty($_POST['capteur'])){
+            $id_cap = $_POST['capteur'];
+        }
+        else{
+            $id_cap = "1";
+        }
+        if (!empty($_POST['date'])){
+            $id_date = $_POST['date'];
+        }
+        else{
+            $id_date = "defaut";
+        }
+        if (!empty($_COOKIE['id'])){
+				$id= $_COOKIE['id'];
+			}
+		else{
+			$id= null;
+            $url = '../test';
+			header('Location: '.$url);
+		}
+		if (!empty($_COOKIE['mdp'])){
+				$mdp= $_COOKIE['mdp'];
+			}
+		else{
+			$mdp= null;
+		}
+        $db_connection = pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+        if (!$db_connection) {
+            echo "An error occurred.\n";
+        exit;
+        }
+    ?>
     <div id="utilisateur">
-        <label for="deco"><?php echo htmlspecialchars($id); ?> :</label>
-        <input type="button" id="deco" value="Déconnexion" onclick="deco()">
+        <?php 
+            echo '<label for="deco">';
+            echo $id;
+            echo ' :</label>';
+        ?>
+        <input type="button" id="deco" value="déconnexion" onclick="deco()">
     </div>
-
     <div class="corp">
         <form method="post" id="info">
             <script>
@@ -50,84 +63,118 @@ if (!$db_connection) {
                     document.forms["info"].submit();
                 }
             </script>
-
-            <label for="capteur">Capteur :</label>
+            <label for="capteur">Choisissez un capteur :</label>
             <select id="capteur" name="capteur" onchange="envoie_cap()">
                 <?php
-                $id_cap = $_POST['capteur'] ?? '1';
                 $sql_cap = pg_query($db_connection, "SELECT * FROM capteur");
                 while ($row = pg_fetch_row($sql_cap)) {
-                    $selected = ($row[0] == $id_cap) ? 'selected' : '';
-                    echo "<option value=\"{$row[0]}\" $selected>{$row[1]}</option>";
+                    if ($row[0] == $id_cap){
+                        echo '<option selected value="';
+                    }
+                    else{
+                        echo '<option value="';
+                    }
+                    echo $row[0];
+                    echo '">';
+                    echo $row[1];
+                    echo '</option>';
                 }
                 ?>
             </select>
-
-            <label for="date">Date :</label>
+            <label for="date">Choisissez une date :</label>
             <select id="date" name="date" onchange="envoie()">
                 <option value="defaut">Maintenant</option>
                 <?php
-                $id_date = $_POST['date'] ?? 'defaut';
                 $sql_date = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap'");
-                while ($row = pg_fetch_row($sql_date)) {
-                    $selected = ($row[0] == $id_date) ? 'selected' : '';
-                    echo "<option value=\"{$row[0]}\" $selected>{$row[5]}</option>";
+                if (!$sql_date) {
+                    echo "An error occurred.\n";
+                exit;
                 }
-                $tout_selected = ($id_date === 'tout') ? 'selected' : '';
-                echo "<option value=\"tout\" $tout_selected>Tous les points</option>";
+                while ($row = pg_fetch_row($sql_date)) {
+                    if ($row[0] == $id_date){
+                        echo '<option selected value="';
+                    }
+                    else{
+                        echo '<option value="';
+                    }
+                    echo $row[0];
+                    echo '">';
+                    echo $row[5];
+                    echo '</option>';
+                }
+                if ($id_date == "tout") {
+                    echo '<option value="tout" selected>Tous les capteur</option>';
+                }
+                else{
+                    echo '<option value="tout">Tous les capteur</option>';
+                }
                 ?>
             </select>
-
-            <input type="submit" value="Valider">
-            <input type="reset" value="Réinitialiser" style="margin-left:10px;">
+            <input type="submit" value="Réinitialiser">
         </form>
-
         <?php
-        if ($id_date === 'defaut') {
+        if ($id_date == 'defaut'){
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
-        } elseif ($id_date === 'tout') {
+        }
+        elseif($id_date == "tout"){
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
-        } else {
+        }
+        else{
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
         }
-
-        echo '<div class="donnees">';
         while ($row = pg_fetch_row($sql)) {
-            echo "<p class=\"coordonnees\">x = {$row[3]}</p>";
-            echo "<p class=\"coordonnees\">y = {$row[2]}</p>";
-        }
-        echo '</div>';
-        ?>
+            $x = $row[3];
+            $y = $row[2];        
+            echo '<div class="donnees"><p class="coordonnees">x = ';
+            echo $row[3];
+            echo '</p>';
 
+            echo '<p class="coordonnees">y = ';
+            echo $row[2];
+            echo '</p></div>';
+            
+        }
+        ?>
+        </style>
         <div id="map"></div>
-    </div>
-
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <script
+            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""
+        ></script>
+    <script src="script_maps.js"></script>
     <script>
-        var map = L.map('map').setView([48.8584, 2.2945], 13);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
         <?php
-        if ($id_date === 'defaut' || $id_date === 'tout') {
+        if ($id_date == 'defaut' or $id_date == "tout"){
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
-        } else {
+        }
+        else{
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
         }
         while ($row = pg_fetch_row($sql)) {
-            echo "L.marker([{$row[3]}, {$row[2]}]).addTo(map);";
-        }
-
-        if ($id_date === 'tout') {
-            echo "var polyline = L.polyline([";
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
-            $points = [];
-            while ($row = pg_fetch_row($sql)) {
-                $points[] = "[{$row[3]}, {$row[2]}]";
-            }
-            echo implode(',', $points);
-            echo "], {color: 'red'}).addTo(map);";
+            echo 'var marker = L.marker([';
+            echo $row[3];
+            echo ', ';
+            echo $row[2];
+            echo ']).addTo(map);';
         }
         ?>
+        var polyline = L.polyline([
+            <?php
+                if ($id_date == "tout"){
+                    $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
+        
+                    while ($row = pg_fetch_row($sql)) {
+                        echo '[';
+                        echo $row[3];
+                        echo ', ';
+                        echo $row[2];
+                        echo '],';
+                    }
+                }
+        ?>
+        ]).addTo(map);
     </script>
+    </div>
 </body>
 </html>
