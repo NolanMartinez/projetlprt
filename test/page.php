@@ -11,13 +11,6 @@
 </head>
 <body >
     <script src="script_page.js"></script>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
     <?php
         if (!empty($_POST['capteur'])){
             $id_cap = $_POST['capteur'];
@@ -39,35 +32,7 @@
             $url = '../test';
 			header('Location: '.$url);
 		}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> parent of 85cdedd (j)
-		session_start();
-        if (empty($_SESSION['user'])) {
-            header('Location: index.php');
-            exit;
-        }
-        $id = $_SESSION['user'];
-        $db_connection = @pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
-        if (!$db_connection) {
-            session_destroy();
-            header('Location: index.php');
-            exit;
-<<<<<<< HEAD
-=======
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
+
 		if (!empty($_COOKIE['mdp'])){
 				$mdp= $_COOKIE['mdp'];
 			}
@@ -78,30 +43,10 @@
         if (!$db_connection) {
             echo "An error occurred.\n";
         exit;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
->>>>>>> parent of 85cdedd (j)
-        }
-    ?>
-=======
 
->>>>>>> parent of 0a9f9a5 (comit suppr)
-=======
         }
     ?>
->>>>>>> parent of 67b6c05 (a supprimer)
-=======
-        }
-    ?>
->>>>>>> parent of 67b6c05 (a supprimer)
+
     <div id="utilisateur">
         <?php 
             echo '<label for="deco">';
