@@ -14,6 +14,9 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 85cdedd (j)
 				session_start();
                 $erreur = false;
                 if ($_POST && !empty($_POST['identifiant']) && !empty($_POST['mdp'])) {
@@ -33,6 +36,7 @@
 				if (!empty($_SESSION['user'])) {
             		header('Location: page.php');
             		exit;
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
@@ -57,6 +61,8 @@
 >>>>>>> parent of 67b6c05 (a supprimer)
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
+=======
+>>>>>>> parent of 85cdedd (j)
                 }
             ?>
 

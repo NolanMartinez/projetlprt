@@ -35,6 +35,9 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 85cdedd (j)
 		session_start();
         if (empty($_SESSION['user'])) {
             header('Location: index.php');
@@ -46,6 +49,7 @@
             session_destroy();
             header('Location: index.php');
             exit;
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
@@ -68,6 +72,8 @@
 >>>>>>> parent of 67b6c05 (a supprimer)
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
+=======
+>>>>>>> parent of 85cdedd (j)
         }
     ?>
     <div id="utilisateur">
