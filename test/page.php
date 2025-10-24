@@ -13,6 +13,9 @@
     <script src="script_page.js"></script>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> parent of 67b6c05 (a supprimer)
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
     <?php
@@ -41,6 +44,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> parent of 85cdedd (j)
 		session_start();
@@ -62,6 +66,8 @@
 >>>>>>> parent of 67b6c05 (a supprimer)
 =======
 >>>>>>> parent of 67b6c05 (a supprimer)
+=======
+>>>>>>> parent of 67b6c05 (a supprimer)
 		if (!empty($_COOKIE['mdp'])){
 				$mdp= $_COOKIE['mdp'];
 			}
@@ -72,6 +78,7 @@
         if (!$db_connection) {
             echo "An error occurred.\n";
         exit;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -87,6 +94,10 @@
 =======
 
 >>>>>>> parent of 0a9f9a5 (comit suppr)
+=======
+        }
+    ?>
+>>>>>>> parent of 67b6c05 (a supprimer)
 =======
         }
     ?>
