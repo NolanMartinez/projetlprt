@@ -7,5 +7,9 @@ function Affiche() {
         return;
     }
 
+
+    document.cookie = "id=" + encodeURIComponent(identifiant);
+    document.cookie = "mdp=" + encodeURIComponent(mdp);
+
     document.forms["identification"].submit();
 }
