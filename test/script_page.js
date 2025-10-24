@@ -1,9 +1,6 @@
 function deco() {
-    fetch('logout.php', { method: 'GET' })
+    fetch('logout.php')
         .then(() => {
-            window.location.href = 'index.php';
-        })
-        .catch(() => {
             window.location.href = 'index.php';
         });
 }
