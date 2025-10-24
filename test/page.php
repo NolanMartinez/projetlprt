@@ -32,6 +32,7 @@
             $url = '../test';
 			header('Location: '.$url);
 		}
+<<<<<<< HEAD
 		session_start();
         if (empty($_SESSION['user'])) {
             header('Location: index.php');
@@ -43,6 +44,18 @@
             session_destroy();
             header('Location: index.php');
             exit;
+=======
+		if (!empty($_COOKIE['mdp'])){
+				$mdp= $_COOKIE['mdp'];
+			}
+		else{
+			$mdp= null;
+		}
+        $db_connection = pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+        if (!$db_connection) {
+            echo "An error occurred.\n";
+        exit;
+>>>>>>> parent of 67b6c05 (a supprimer)
         }
     ?>
     <div id="utilisateur">
