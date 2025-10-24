@@ -9,7 +9,7 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
 </head>
-<body >
+<body>
     <script src="script_page.js"></script>
     <?php
         if (!empty($_POST['capteur'])){
@@ -25,25 +25,24 @@
             $id_date = "defaut";
         }
         if (!empty($_COOKIE['id'])){
-				$id= $_COOKIE['id'];
-			}
-		else{
-			$id= null;
+            $id= $_COOKIE['id'];
+        }
+        else{
+            $id= null;
             $url = '../test';
-			header('Location: '.$url);
-		}
+            header('Location: '.$url);
+        }
 
-		if (!empty($_COOKIE['mdp'])){
-				$mdp= $_COOKIE['mdp'];
-			}
-		else{
-			$mdp= null;
-		}
+        if (!empty($_COOKIE['mdp'])){
+            $mdp= $_COOKIE['mdp'];
+        }
+        else{
+            $mdp= null;
+        }
         $db_connection = pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
         if (!$db_connection) {
             echo "An error occurred.\n";
-        exit;
-
+            exit;
         }
     ?>
 
@@ -91,7 +90,7 @@
                 $sql_date = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap'");
                 if (!$sql_date) {
                     echo "An error occurred.\n";
-                exit;
+                    exit;
                 }
                 while ($row = pg_fetch_row($sql_date)) {
                     if ($row[0] == $id_date){
@@ -115,6 +114,7 @@
             </select>
             <input type="submit" value="Réinitialiser">
         </form>
+
         <?php
         if ($id_date == 'defaut'){
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
@@ -126,58 +126,49 @@
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
         }
         while ($row = pg_fetch_row($sql)) {
-            $x = $row[3];
-            $y = $row[2];        
             echo '<div class="donnees"><p class="coordonnees">x = ';
             echo $row[3];
-            echo '</p>';
-
-            echo '<p class="coordonnees">y = ';
+            echo '</p><p class="coordonnees">y = ';
             echo $row[2];
             echo '</p></div>';
-            
         }
         ?>
-        </style>
+
         <div id="map"></div>
-        <script
-            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin=""
-        ></script>
-    <script src="script_maps.js"></script>
-    <script>
-        <?php
-        if ($id_date == 'defaut' or $id_date == "tout"){
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
-        }
-        else{
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
-        }
-        while ($row = pg_fetch_row($sql)) {
-            echo 'var marker = L.marker([';
-            echo $row[3];
-            echo ', ';
-            echo $row[2];
-            echo ']).addTo(map);';
-        }
-        ?>
-        var polyline = L.polyline([
+            crossorigin=""></script>
+
+        <script>
             <?php
-                if ($id_date == "tout"){
-                    $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
-        
-                    while ($row = pg_fetch_row($sql)) {
-                        echo '[';
-                        echo $row[3];
-                        echo ', ';
-                        echo $row[2];
-                        echo '],';
-                    }
+            if ($id_date == 'defaut' || $id_date == "tout") {
+                $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
+            } else {
+                $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
+            }
+            $row = pg_fetch_row($sql);
+            if ($row) {
+                echo "var currentLat = " . $row[3] . ";\n";
+                echo "var currentLng = " . $row[2] . ";\n";
+            } else {
+                echo "var currentLat = 46.75; var currentLng = 1.7;";
+            }
+            ?>
+
+            <?php if ($id_date == "tout"): ?>
+            var polylinePoints = [
+                <?php
+                $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
+                while ($row = pg_fetch_row($sql)) {
+                    echo "[" . $row[3] . ", " . $row[2] . "],";
                 }
-        ?>
-        ]).addTo(map);
-    </script>
+                ?>
+            ];
+            <?php endif; ?>
+        </script>
+
+        <script src="script_maps.js"></script>
     </div>
 </body>
 </html>

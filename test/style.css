@@ -150,6 +150,15 @@ body {
     }
 }
 
+@keyframes blink {
+    50% { opacity: 0.3; }
+}
+
+@keyframes shake {
+    10%,30%,50%,70%,90% { transform: translateX(-5px); }
+    20%,40%,60%,80% { transform: translateX(5px); }
+}
+
 @media (max-width: 768px) {
     .corp {
         margin: 70px auto 20px;
