@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -48,4 +46,3 @@
         <script src="script.js"></script>
 </body>
 </html>
->>>>>>> parent of 67b6c05 (a supprimer)
