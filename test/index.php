@@ -11,6 +11,7 @@
     <div class="login-container">
         <form method="post" id="identification">
             <?php
+<<<<<<< HEAD
 				session_start();
                 $erreur = false;
                 if ($_POST && !empty($_POST['identifiant']) && !empty($_POST['mdp'])) {
@@ -30,6 +31,20 @@
 				if (!empty($_SESSION['user'])) {
             		header('Location: page.php');
             		exit;
+=======
+                $erreur = false;
+                $id = !empty($_COOKIE['id']) ? $_COOKIE['id'] : null;
+                $mdp = !empty($_COOKIE['mdp']) ? $_COOKIE['mdp'] : null;
+                if ($id !== null && $mdp !== null) {
+                    $db_connection = @pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+                    
+                    if (!$db_connection) {
+                        $erreur = true;
+                    } else {
+                        header('Location: page.php');
+                        exit;
+                    }
+>>>>>>> f673efc6a6483eb3044459f0302741a059368986
                 }
             ?>
 
