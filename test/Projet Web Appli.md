@@ -18,3 +18,13 @@
 &nbsp;		On peut également ce déconnecter
 
 * Création d'apache (Sonia)
+
+
+
+## Semaine 3:
+
+* Modification de la carte "leaflet"
+* modification de la base de données avec les vrai coordonnées
+* style css (Lucas)
+* ajout de données via la page test
+* Création d'une application téléphone ()

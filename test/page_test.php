@@ -45,7 +45,7 @@
 		else{
 			$mdp= null;
 		}
-        $db_connection = pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+        $db_connection = pg_connect("host=10.240.4.226 port=5432 dbname=projet_gps user=$id password=$mdp");
         if (!$db_connection) {
             echo "An error occurred.\n";
         exit;
@@ -100,7 +100,7 @@
                     $id_donnees = $row[0];
                 }
                 $id_donnees += 1;
-                $db_connection_envoie = pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=envoie password=script"); 
+                $db_connection_envoie = pg_connect("host=10.108.6.226 port=5432 dbname=projet_gps user=envoie password=script"); 
                 $sql_envoie = pg_query($db_connection_envoie, "INSERT INTO donnees (id_donnees, id_capteur, longitude, latitude, date_donnees)VALUES ($id_donnees, $id_cap, $longitude, $latitude, '$date')");
             }
 
