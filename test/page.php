@@ -39,7 +39,7 @@
         else{
             $mdp= null;
         }
-        $db_connection = pg_connect("host=10.59.164.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+        $db_connection = pg_connect("host=10.108.6.226 port=5432 dbname=projet_gps user=$id password=$mdp");
         if (!$db_connection) {
             echo "An error occurred.\n";
             exit;
