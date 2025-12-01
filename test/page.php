@@ -93,6 +93,7 @@
                     exit;
                 }
                 while ($row = pg_fetch_row($sql_date)) {
+                    $dateformat = $row[5];
                     if ($row[0] == $id_date){
                         echo '<option selected value="';
                     }
