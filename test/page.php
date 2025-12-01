@@ -11,8 +11,7 @@
 </head>
 <body>
 
-    <!-- 🔥 Message d’alerte dynamique -->
-    <div id="zoneAlert" class="hidden">⚠ Capteur hors de la zone !</div>
+    <div id="zoneAlert" class="hidden">Capteur hors de la zone !</div>
 
     <script src="script_page.js"></script>
     <?php
