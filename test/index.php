@@ -28,7 +28,7 @@
                     $mdp = null;
                 }
                 if ($id !== null && $mdp !== null) {
-                    $db_connection = @pg_connect("host=$ip port=5432 dbname=projet_gps user=aadmin password=admin");
+                    $db_connection = @pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
                     
                     if (!$db_connection) {
                         echo "Ereur\n";

@@ -13,6 +13,12 @@
     <script src="script_page.js"></script>
     <?php
         include ( "variable.php");
+        if (!empty($_COOKIE['deco'])){
+            setcookie("deco", "", time() - 3600);
+            session_start();
+            session_destroy();
+        }
+        include( "demare_session.php");
         if (!empty($_POST['capteur'])){
             $id_cap = $_POST['capteur'];
         }
@@ -31,7 +37,7 @@
 		else{
 			$cookie_de_session= null;
             $url = '../test';
-			header('Location: '.$url);
+			//header('Location: '.$url);
 		}
 
         $db_connection = pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
@@ -45,9 +51,9 @@
     <div id="utilisateur">
         <?php 
             echo '<label for="deco">';
-            $sql_compte = pg_query($db_connection, "SELECT nom_d_utilisateur FROM compte WHERE id_compte = $cookie_de_session");
+            $sql_compte = pg_query($db_connection, "SELECT nom_d_utilisateur FROM compte WHERE id_compte = 1");
             while ($row = pg_fetch_row($sql_compte)) {
-                echo $row[0];
+                echo $_SESSION['identifiant'];
             }
             echo ' :</label>';
         ?>
