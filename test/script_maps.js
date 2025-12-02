@@ -21,13 +21,10 @@ document.addEventListener("DOMContentLoaded", function () {
         fillOpacity: 0.2,
         radius: 50000
     }).addTo(map);
-
-    function isInZone(lat, lng) {
-        var point = L.latLng(lat, lng);
-        var center = geofence.getLatLng();
-        return point.distanceTo(center) <= geofence.getRadius();
-    }
-
+    
+    var currentZoneId = null;
+    var isDragging = false;
+    
     var marker = L.marker([currentLat, currentLng]).addTo(map);
 
     var zoneIcon = L.divIcon({
@@ -40,7 +37,85 @@ document.addEventListener("DOMContentLoaded", function () {
         icon: zoneIcon
     }).addTo(map);
 
+    function isInZone(lat, lng) {
+        var point = L.latLng(lat, lng);
+        var center = geofence.getLatLng();
+        return point.distanceTo(center) <= geofence.getRadius();
+    }
+    
+    function saveZoneToDatabase() {
+        var center = geofence.getLatLng();
+        var zoneData = {
+            id_zone: currentZoneId || 0,
+            latitude: center.lat,
+            longitude: center.lng,
+            radius: geofence.getRadius()
+        };
+        
+        console.log('Envoi zone:', zoneData);
+        
+        fetch('api_zones.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(zoneData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Réponse HTTP:', response.status);
+                return response.text().then(text => {
+                    console.error('Réponse:', text);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.success && data.id_zone) {
+                currentZoneId = data.id_zone;
+                console.log('Zone sauvegardée avec l\'ID:', currentZoneId);
+            } else if (data && data.error) {
+                console.error('Erreur API:', data.error);
+            }
+        })
+        .catch(error => console.error('Erreur lors de la sauvegarde:', error));
+    }
+    
+    function loadZonesFromDatabase() {
+        console.log('Chargement des zones...');
+        fetch('api_zones.php', {
+            method: 'GET'
+        })
+        .then(response => {
+            if (!response.ok) {
+                console.error('Réponse HTTP:', response.status);
+                return response.text().then(text => {
+                    console.error('Réponse:', text);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Données reçues:', data);
+            if (Array.isArray(data) && data.length > 0) {
+                var zone = data[0];
+                console.log('Zone trouvée, latitude:', zone.latitude, 'longitude:', zone.longitude, 'radius:', zone.radius);
+                geofence.setLatLng([parseFloat(zone.latitude), parseFloat(zone.longitude)]);
+                geofence.setRadius(parseFloat(zone.radius));
+                centerMarker.setLatLng([parseFloat(zone.latitude), parseFloat(zone.longitude)]);
+                currentZoneId = zone.id_zone;
+                console.log('Zone chargée de la BD:', zone);
+            } else {
+                console.log('Aucune zone trouvée en BD, création d\'une nouvelle');
+                saveZoneToDatabase();
+            }
+        })
+        .catch(error => console.error('Erreur lors du chargement:', error));
+    }
+
     let alreadyAlerted = false;
+    
+    loadZonesFromDatabase();
 
     function updateZoneStatus() {
         var alertBox = document.getElementById("zoneAlert");
@@ -81,9 +156,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     map.whenReady(updateZoneStatus);
 
+    centerMarker.on("dragstart", function (e) {
+        isDragging = true;
+    });
+
     centerMarker.on("drag", function (e) {
         geofence.setLatLng(e.target.getLatLng());
         updateZoneStatus();
+    });
+
+    centerMarker.on("dragend", function (e) {
+        isDragging = false;
+        saveZoneToDatabase();
     });
 
     if (typeof polylinePoints !== "undefined") {
@@ -140,6 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!isNaN(newRadius) && newRadius > 0) {
             geofence.setRadius(Number(newRadius));
             updateZoneStatus();
+            saveZoneToDatabase();
         }
     };
 
