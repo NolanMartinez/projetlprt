@@ -1,6 +1,5 @@
 function deco() {
-
-    document.cookie = "id=";
-    document.cookie = "mdp=;";
+    
+    document.cookie = "cookie_session=;";
     window.location.reload();
 }
