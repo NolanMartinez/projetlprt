@@ -12,6 +12,7 @@
 <body >
     <script src="script_page.js"></script>
     <?php
+        include ( "variable.php");
         if (!empty($_POST['capteur'])){
             $id_cap = $_POST['capteur'];
         }
@@ -24,22 +25,16 @@
         else{
             $id_date = "defaut";
         }
-        if (!empty($_COOKIE['id'])){
-				$id= $_COOKIE['id'];
+        if (!empty($_COOKIE['cookie_session'])){
+				$cookie_de_session= $_COOKIE['cookie_session'];
 			}
 		else{
-			$id= null;
+			$cookie_de_session= null;
             $url = '../test';
 			header('Location: '.$url);
 		}
 
-		if (!empty($_COOKIE['mdp'])){
-				$mdp= $_COOKIE['mdp'];
-			}
-		else{
-			$mdp= null;
-		}
-        $db_connection = pg_connect("host=10.108.6.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+        $db_connection = pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
         if (!$db_connection) {
             echo "An error occurred.\n";
         exit;
@@ -50,7 +45,10 @@
     <div id="utilisateur">
         <?php 
             echo '<label for="deco">';
-            echo $id;
+            $sql_compte = pg_query($db_connection, "SELECT nom_d_utilisateur FROM compte WHERE id_compte = $cookie_de_session");
+            while ($row = pg_fetch_row($sql_compte)) {
+                echo $row[0];
+            }
             echo ' :</label>';
         ?>
         <input type="button" id="deco" value="déconnexion" onclick="deco()">
