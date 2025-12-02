@@ -5,17 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style_modif.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
 </head>
-<body>
+<body >
     <script src="script_page.js"></script>
     <?php
+        include ( "variable.php");
         if (!empty($_POST['capteur'])){
             $id_cap = $_POST['capteur'];
         }
         else{
-            $id_cap = "1";
+            $id_cap = null;
         }
-        $db_connection = pg_connect("host=10.108.6.226 port=5432 dbname=projet_gps user=aadmin password=admin");
+        if (!empty($_POST['x'])){
+            $latitude = $_POST['x'];
+        }
+        else{
+            $latitude = null;
+        }
+        if (!empty($_POST['y'])){
+            $longitude = $_POST['y'];
+        }
+        else{
+            $longitude = null;
+        }
+        if (!empty($_COOKIE['cookie_session'])){
+				$cookie_de_session= $_COOKIE['cookie_session'];
+			}
+		else{
+			$cookie_de_session= null;
+            $url = '../test';
+			header('Location: '.$url);
+		}
+        $db_connection = pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
         if (!$db_connection) {
             echo "An error occurred.\n";
         exit;
@@ -24,23 +49,18 @@
     <div id="utilisateur">
         <?php 
             echo '<label for="deco">';
-            echo 'aadmin';
+            $sql_compte = pg_query($db_connection, "SELECT nom_d_utilisateur FROM compte WHERE id_compte = $cookie_de_session");
+            while ($row = pg_fetch_row($sql_compte)) {
+                echo $row[0];
+            }
             echo ' :</label>';
         ?>
         <input type="button" id="deco" value="déconnexion" onclick="deco()">
     </div>
     <div class="corp">
         <form method="post" id="info">
-            <script>
-                function envoie_cap() {
-                    document.forms["info"].submit();
-                }
-                function envoie() {
-                    document.forms["info"].submit();
-                }
-            </script>
             <label for="capteur">Choisissez un capteur :</label>
-            <select id="capteur" name="capteur" onchange="envoie_cap()">
+            <select id="capteur" name="capteur">
                 <?php
                 $sql_cap = pg_query($db_connection, "SELECT * FROM capteur");
                 while ($row = pg_fetch_row($sql_cap)) {
@@ -57,18 +77,40 @@
                 }
                 ?>
             </select>
-            <input type="submit" value="Envoyer">
+            <div class="zone_button">
+                <input type="submit" value="Ajouter">
+                <input type="button" id="reset" value="Réinitialiser">
+            </div>
+        
+            <div class="donnees">
+                <label for="x" class="label_coordonnes"><p id="x_label">Cliquer sur</p></label>
+                <input type="text" name="x" id="x" class="zone_coordonnes" onchange="entre_coord()">
+
+                <label for="x" class="label_coordonnes"><p id="y_label">la carte</p></label>
+                <input type="text" name="y" id="y" class="zone_coordonnes" onchange="entre_coord()">
+            </div>
         </form>
-        <style>
-            #img-2{
-                top : calc(0px - 36px);
-                left : calc(0px - 8px);;
+        <?php 
+            $date = date("Y-n-j");
+            if ($id_cap and $latitude and $longitude){
+                $sql_id = pg_query($db_connection, "SELECT id_donnees FROM donnees ORDER BY id_donnees");
+                while ($row = pg_fetch_row($sql_id)) {
+                    $id_donnees = $row[0];
+                }
+                $id_donnees += 1;
+                $db_connection_envoie = pg_connect("host=$ip port=5432 dbname=projet_gps user=envoie password=script"); 
+                $sql_envoie = pg_query($db_connection_envoie, "INSERT INTO donnees (id_donnees, id_capteur, longitude, latitude, date_donnees)VALUES ($id_donnees, $id_cap, $longitude, $latitude, '$date')");
             }
-        </style>
-        <div id="plans">
-        <img id="img-1" src="Carte_France_geo_dep.png" >
-        <img id="img-2" src="position.png" >
-        </div>
+
+            
+        ?>
+        <div id="map"></div>
+        <script
+            src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""
+        ></script>
+    <script src="script_modif.js"></script>
     </div>
 </body>
 </html>
