@@ -14,6 +14,14 @@
             <?php
                 include ( "variable.php");
                 $erreur = false;
+                session_start();
+                if (!empty($_SESSION['identifiant'])){
+                    $url = 'page.php';
+		            header('Location: '.$url);
+                }
+                else{
+                    session_destroy();
+                }
                 if (!empty($_POST['identifiant'])){
                     $id = $_POST['identifiant'];
                 }
@@ -28,30 +36,30 @@
                     $mdp = null;
                 }
                 if ($id !== null && $mdp !== null) {
-                    $db_connection = @pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
+                    $db_connection = @pg_connect("host=$ip port=5432 dbname=projet_gps user=aadmin password=admin");
                     
                     if (!$db_connection) {
                         echo "Ereur\n";
                         exit;
                     }
-                    $sql_compte = pg_query($db_connection, "SELECT mdp_hash, id_compte FROM compte WHERE nom_d_utilisateur = '$id'");
-                        $nb = 0;
+                    $sql_compte = pg_query($db_connection, "SELECT mdp_hash, droit FROM compte WHERE nom_d_utilisateur = '$id'");
                         while ($row = pg_fetch_row($sql_compte)) {
                             if ($row[0] == $mdp_hash){
-                                echo '<script> cookie_session(';
-                                echo $row[1];
-                                echo ')</script>';
-                                //header('Location: page.php');
+                                
+                                session_start();
+    
+                                //On définit des variables de session
+                                $_SESSION['identifiant'] = $id;
+                                $_SESSION['droit'] = $row[1];
+                                header('Location: page.php');
+
                             }
                             else{
                                 $erreur = true;
                             }
-                        }
-                        if ($nb == 0){
-                            $erreur = true;
-                        }
                 }
-                elseif ($id !== null || $mdp !== null){
+                }
+                else{
                     $erreur = true;
                 }
             ?>

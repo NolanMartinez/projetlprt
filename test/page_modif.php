@@ -14,6 +14,7 @@
     <script src="script_page.js"></script>
     <?php
         include ( "variable.php");
+        include ( "demare_session.php");
         if (!empty($_POST['capteur'])){
             $id_cap = $_POST['capteur'];
         }
@@ -32,14 +33,6 @@
         else{
             $longitude = null;
         }
-        if (!empty($_COOKIE['cookie_session'])){
-				$cookie_de_session= $_COOKIE['cookie_session'];
-			}
-		else{
-			$cookie_de_session= null;
-            $url = '../test';
-			header('Location: '.$url);
-		}
         $db_connection = pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
         if (!$db_connection) {
             echo "An error occurred.\n";
@@ -49,10 +42,7 @@
     <div id="utilisateur">
         <?php 
             echo '<label for="deco">';
-            $sql_compte = pg_query($db_connection, "SELECT nom_d_utilisateur FROM compte WHERE id_compte = $cookie_de_session");
-            while ($row = pg_fetch_row($sql_compte)) {
-                echo $row[0];
-            }
+            echo $_SESSION['identifiant'];
             echo ' :</label>';
         ?>
         <input type="button" id="deco" value="déconnexion" onclick="deco()">
