@@ -84,7 +84,7 @@
             <select id="date" name="date" onchange="envoie()">
                 <option value="defaut">Maintenant</option>
                 <?php
-                $sql_date = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap'");
+                $sql_date = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
                 if (!$sql_date) {
                     echo "An error occurred.\n";
                 exit;
@@ -126,13 +126,21 @@
         while ($row = pg_fetch_row($sql)) {
             $x = $row[3];
             $y = $row[2];        
-            echo '<div class="donnees"><p class="coordonnees">x = ';
+            echo '<div class="donnees">';
+            if ($id_date == "tout"){
+                $date = $row[5];
+                $date_form = date('j/n/y', strtotime($date));
+                echo '<p class="coordonnees">Le ';
+                echo $date_form;
+                echo '</p>';
+            }
+            echo'<p class="coordonnees">x = ';
             echo $row[3];
             echo '</p>';
-
+            echo '</p>';
             echo '<p class="coordonnees">y = ';
             echo $row[2];
-            echo '</p></div>';
+            echo '</div>';
             
         }
         ?>

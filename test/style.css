@@ -154,6 +154,38 @@ body {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
 }
+#envoie {
+    background: linear-gradient(135deg, #2a5298, #1e3c72);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+#envoie:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
+}
+#suppr_btn {
+    background: linear-gradient(135deg, #2a5298, #1e3c72);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+#suppr_btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
+}
 @keyframes fadeInUp {
     from {
         opacity: 0;

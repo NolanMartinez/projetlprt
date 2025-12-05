@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <script src="script_test.js"></script>
+    
     <div class="login-container">
         <form method="post" id="identification">
             <?php
@@ -47,7 +47,6 @@
                             if ($row[0] == $mdp_hash){
                                 
                                 session_start();
-    
                                 //On définit des variables de session
                                 $_SESSION['identifiant'] = $id;
                                 $_SESSION['droit'] = $row[1];
