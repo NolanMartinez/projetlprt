@@ -91,7 +91,7 @@
                 }
                 while ($row = pg_fetch_row($sql_date)) {
                     $date = $row[5];
-                    $date_form = date('j/n/y', strtotime($date));
+                    $date_form = date('\l\e j/n/Y à G\Hi s\s', strtotime($date));
                     if ($row[0] == $id_date){
                         echo '<option selected value="';
                     }
@@ -129,7 +129,7 @@
             echo '<div class="donnees">';
             if ($id_date == "tout"){
                 $date = $row[5];
-                $date_form = date('j/n/y', strtotime($date));
+                $date_form = date('j/n/Y G\Hi s\s', strtotime($date));
                 echo '<p class="coordonnees">Le ';
                 echo $date_form;
                 echo '</p>';

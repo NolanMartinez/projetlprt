@@ -1,8 +1,8 @@
-function commit() {
-    document.forms["identification"].submit();
-    window.location.reload();
-}
-function cookie_session(id_compte) {
-    document.cookie = "cookie_session=" + encodeURIComponent(id_compte);
-    window.location.href="page.php";
+function affiche_bandeau(){
+    if (document.getElementById("deroulant").style.display=="block"){
+        document.getElementById("deroulant").style.display="none";
+    }
+    else{
+        document.getElementById("deroulant").style.display="block";
+    }
 }

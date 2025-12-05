@@ -1,6 +1,12 @@
 .zone_coordonnes{
     visibility: collapse;
+    border-radius: 5px;
+    border: 2px solid #ddd;
+    height: 30px;
+    width: 100px;
+    text-align: center;
 }
+
 .label_coordonnes{
     font-size: 15px;
     margin-top: auto;
