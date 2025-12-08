@@ -199,13 +199,19 @@ body {
 }
 .modifier{
     text-align: right;
+    margin-top: 10px;
+    display: none;
 }
 #deroulant{
     display: none;
+    margin-top: 10px;
 }
 #deroulant a{
     color: #1e3c72;
     text-decoration: none;
+}
+.element_modifier li{
+    margin-top: 5px;
 }
 #deroulant a:hover{
     color: #436fbc;

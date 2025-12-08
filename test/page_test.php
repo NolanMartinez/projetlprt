@@ -43,6 +43,21 @@
 
         }
     ?>
+    <script>
+        function affiche_bandeau(){
+            if (document.getElementById("deroulant").style.display=="block"){
+                document.getElementById("deroulant").style.display="none";
+            }
+            else{
+                document.getElementById("deroulant").style.display="block";
+                <?php
+                if ($_SESSION['droit'] != "voir"){
+                    echo'document.getElementById("modifier").style.display="block";';
+                }
+                ?>
+            }
+        }
+    </script>
     <div id="bandeau">
         <ul>
             <li class="utilisateur">
@@ -55,7 +70,7 @@
                     <li>
                         <input type="button" id="deco" value="déconnexion" onclick="deco()">
                     </li>
-                    <li class="modifier">
+                    <li class="modifier" id="modifier">
                         <p>Modifier</p>
                         <ul class="element_modifier">
                             <li><a href="#">Zones</a></li>
