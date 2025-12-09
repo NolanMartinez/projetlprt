@@ -12,7 +12,7 @@ body {
     padding: 20px;
 }
 
-#utilisateur {
+#bandeau {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -31,9 +31,10 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-#utilisateur label {
+#bandeau p {
     margin: 0;
     font-weight: 600;
+    width: 100px;
 }
 
 #deco {
@@ -184,6 +185,36 @@ body {
 
 #suppr_btn:hover {
     transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
+}
+#bandeau ul{
+    list-style: none;
+}
+.utilisateur{
+    text-align: center;
+}
+.sous_menus p{
+    text-align: left;
+    border-bottom: solid #1e3c72;
+}
+.sous_menus{
+    text-align: right;
+    margin-top: 10px;
+    display: none;
+}
+#deroulant{
+    display: none;
+    margin-top: 10px;
+}
+#deroulant a{
+    color: #1e3c72;
+    text-decoration: none;
+}
+.element_modifier li{
+    margin-top: 5px;
+}
+#deroulant a:hover{
+    color: #436fbc;
     box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
 }
 @keyframes fadeInUp {

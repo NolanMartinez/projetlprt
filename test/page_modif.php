@@ -115,14 +115,47 @@
                 setcookie("ajout", 0);
                 alert("la donnée à été modifié");
             }
+            if ($_SESSION['identifiant'] != "aadmin"){
+                header('Location: '."page.php");
+            }
     ?>
-    <div id="utilisateur">
-        <?php 
-            echo '<label for="deco">';
-            echo $_SESSION['identifiant'];
-            echo ' :</label>';
-        ?>
-        <input type="button" id="deco" value="déconnexion" onclick="deco()">
+    <script>
+        function affiche_bandeau(){
+            if (document.getElementById("deroulant").style.display=="block"){
+                document.getElementById("deroulant").style.display="none";
+            }
+            else{
+                document.getElementById("deroulant").style.display="block";
+                document.getElementById("visualiser").style.display="block";
+                document.getElementById("modifier").style.display="block";
+            }
+        }
+    </script>
+    <div id="bandeau">
+        <ul>
+            <li class="utilisateur">
+                <?php 
+                    echo '<p onclick="affiche_bandeau()" id="nom">';
+                    echo $_SESSION['identifiant'];
+                    echo '</p>';
+                ?>
+                <ul id="deroulant">
+                    <li>
+                        <input type="button" id="deco" value="déconnexion" onclick="deco()">
+                    </li>
+                    <li class="sous_menus" id="visualiser">
+                        <p><a href="page.php">Visualiser</a></p>
+                    </li>
+                    <li class="sous_menus" id="modifier">
+                        <p>Modifier</p>
+                        <ul class="element_modifier">
+                            <li><a href="#">Zones</a></li>
+                            <li><a href="#">Capteur</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
     <div class="corp">
         <form method="post" id="info">

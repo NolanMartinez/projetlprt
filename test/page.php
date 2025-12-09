@@ -41,15 +41,48 @@
         exit;
 
         }
+        if ($_SESSION['droit'] == "ajouter"){
+            header('Location: '."page_ajout.php");;
+        }
     ?>
-
-    <div id="utilisateur">
-        <?php 
-            echo '<label for="deco">';
-            echo $_SESSION['identifiant'];
-            echo ' :</label>';
-        ?>
-        <input type="button" id="deco" value="déconnexion" onclick="deco()">
+    <script>
+        function affiche_bandeau(){
+            if (document.getElementById("deroulant").style.display=="block"){
+                document.getElementById("deroulant").style.display="none";
+            }
+            else{
+                document.getElementById("deroulant").style.display="block";
+                <?php
+                if ($_SESSION['droit'] != "voir"){
+                    echo'document.getElementById("modifier").style.display="block";';
+                }
+                ?>
+            }
+        }
+    </script>
+    <div id="bandeau">
+        <ul>
+            <li class="utilisateur">
+                <?php 
+                    echo '<p onclick="affiche_bandeau()" id="nom">';
+                    echo $_SESSION['identifiant'];
+                    echo '</p>';
+                ?>
+                <ul id="deroulant">
+                    <li>
+                        <input type="button" id="deco" value="déconnexion" onclick="deco()">
+                    </li>
+                    <li class="sous_menus" id="modifier">
+                        <p>Ajouter</p>
+                        <ul class="element_modifier">
+                            <li><a href="#">Zones</a></li>
+                            <li><a href="#">Capteur</a></li>
+                            <li><a href="page_ajout.php">Données</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
     <div class="corp">
         <form method="post" id="info">
@@ -65,7 +98,13 @@
             <label for="capteur">Choisissez un capteur :</label>
             <select id="capteur" name="capteur" onchange="envoie_cap()">
                 <?php
-                $sql_cap = pg_query($db_connection, "SELECT * FROM capteur");
+                if ($_SESSION['droit'] == "admin"){
+                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur");
+                }
+                else{
+                    $id_compte = $_SESSION['id'];
+                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte");
+                }
                 while ($row = pg_fetch_row($sql_cap)) {
                     if ($row[0] == $id_cap){
                         echo '<option selected value="';
@@ -84,6 +123,12 @@
             <select id="date" name="date" onchange="envoie()">
                 <option value="defaut">Maintenant</option>
                 <?php
+                if ($id_date == "tout") {
+                    echo '<option value="tout" selected>Tous les capteur</option>';
+                }
+                else{
+                    echo '<option value="tout">Tous les capteur</option>';
+                }
                 $sql_date = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
                 if (!$sql_date) {
                     echo "An error occurred.\n";
@@ -103,12 +148,6 @@
                     echo $date_form;
                     echo '</option>';
                 }
-                if ($id_date == "tout") {
-                    echo '<option value="tout" selected>Tous les capteur</option>';
-                }
-                else{
-                    echo '<option value="tout">Tous les capteur</option>';
-                }
                 ?>
             </select>
             <input type="submit" value="Réinitialiser">
@@ -118,7 +157,7 @@
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
         }
         elseif($id_date == "tout"){
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
+            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC");
         }
         else{
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");

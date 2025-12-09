@@ -36,13 +36,13 @@
                     $mdp = null;
                 }
                 if ($id !== null && $mdp !== null) {
-                    $db_connection = @pg_connect("host=$ip port=5432 dbname=projet_gps user=aadmin password=admin");
+                    $db_connection = @pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
                     
                     if (!$db_connection) {
                         echo "Ereur\n";
                         exit;
                     }
-                    $sql_compte = pg_query($db_connection, "SELECT mdp_hash, droit FROM compte WHERE nom_d_utilisateur = '$id'");
+                    $sql_compte = pg_query($db_connection, "SELECT mdp_hash, droit, id_compte FROM compte WHERE nom_d_utilisateur = '$id'");
                         while ($row = pg_fetch_row($sql_compte)) {
                             if ($row[0] == $mdp_hash){
                                 
@@ -50,6 +50,7 @@
                                 //On définit des variables de session
                                 $_SESSION['identifiant'] = $id;
                                 $_SESSION['droit'] = $row[1];
+                                $_SESSION['id'] = $row[2];
                                 header('Location: page.php');
 
                             }
