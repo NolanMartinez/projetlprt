@@ -81,9 +81,11 @@
         function affiche_bandeau(){
             if (document.getElementById("deroulant").style.display=="block"){
                 document.getElementById("deroulant").style.display="none";
+                document.getElementById("logo_bandeau").innerHTML="▼";
             }
             else{
                 document.getElementById("deroulant").style.display="block";
+                document.getElementById("logo_bandeau").innerHTML="▲";
                 <?php
                 if ($_SESSION['droit'] != "ajouter"){
                     echo'document.getElementById("visualiser").style.display="block";';
@@ -96,11 +98,14 @@
     <div id="bandeau">
         <ul>
             <li class="utilisateur">
-                <?php 
-                    echo '<p onclick="affiche_bandeau()" id="nom">';
-                    echo $_SESSION['identifiant'];
-                    echo '</p>';
-                ?>
+                <div id="div_nom_logo" onclick="affiche_bandeau()">
+                    <?php 
+                        echo '<p id="nom">';
+                        echo $_SESSION['identifiant'];
+                        echo '</p>';
+                    ?>
+                    <p id="logo_bandeau">▼</p>
+                </div>
                 <ul id="deroulant">
                     <li>
                         <input type="button" id="deco" value="déconnexion" onclick="deco()">

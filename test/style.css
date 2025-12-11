@@ -34,7 +34,7 @@ body {
 #bandeau p {
     margin: 0;
     font-weight: 600;
-    width: 100px;
+    margin-left: auto;
 }
 
 #deco {
@@ -216,6 +216,32 @@ body {
 #deroulant a:hover{
     color: #436fbc;
     box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
+}
+#liste_donnees{
+    display: none;
+}
+#btn_plus_moins{
+    background: linear-gradient(135deg, #2a5298, #1e3c72);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+#btn_plus_moins:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(42, 82, 152, 0.3);
+}
+#div_nom_logo{
+    display: flex;
+    margin-left: auto;
+}
+#logo_bandeau{
+    padding-left: 10px;
 }
 @keyframes fadeInUp {
     from {

@@ -12,6 +12,9 @@
     <div class="login-container">
         <form method="post" id="identification">
             <?php
+                function alert($msg) {
+                    echo "<script type='text/javascript'>alert('$msg');</script>";
+                }
                 include ( "variable.php");
                 $erreur = false;
                 session_start();
@@ -45,7 +48,6 @@
                     $sql_compte = pg_query($db_connection, "SELECT mdp_hash, droit, id_compte FROM compte WHERE nom_d_utilisateur = '$id'");
                         while ($row = pg_fetch_row($sql_compte)) {
                             if ($row[0] == $mdp_hash){
-                                
                                 session_start();
                                 //On définit des variables de session
                                 $_SESSION['identifiant'] = $id;
@@ -78,7 +80,7 @@
                 <input type="password" name="mdp" id="mdp" class="text" placeholder="Entrez votre mot de passe" required>
             </div>
 
-            <input type="button" value="Se connecter" class="bouton-connection" onclick="commit()">
+            <input type="submit" value="Se connecter" class="bouton-connection">
         </form>
     </div>
         <script src="script.js"></script>

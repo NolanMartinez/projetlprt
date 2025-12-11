@@ -18,7 +18,7 @@
             $id_cap = $_POST['capteur'];
         }
         else{
-            $id_cap = "1";
+            $id_cap = "erreur";
         }
         if (!empty($_POST['date'])){
             $id_date = $_POST['date'];
@@ -39,7 +39,18 @@
         if (!$db_connection) {
             echo "An error occurred.\n";
         exit;
-
+        }
+        if ($_SESSION['droit'] == "admin"){
+            $sql_cap = pg_query($db_connection, "SELECT * FROM capteur LIMIT 1");
+        }
+        else{
+            $id_compte = $_SESSION['id'];
+            $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte LIMIT 1");
+        }
+        while ($row = pg_fetch_row($sql_cap)) {
+            if($id_cap == "erreur"){
+                $id_cap = $row[0];
+            }
         }
         if ($_SESSION['droit'] == "ajouter"){
             header('Location: '."page_ajout.php");;
@@ -49,9 +60,12 @@
         function affiche_bandeau(){
             if (document.getElementById("deroulant").style.display=="block"){
                 document.getElementById("deroulant").style.display="none";
+                document.getElementById("logo_bandeau").innerHTML="▼";
+
             }
             else{
                 document.getElementById("deroulant").style.display="block";
+                document.getElementById("logo_bandeau").innerHTML="▲";
                 <?php
                 if ($_SESSION['droit'] != "voir"){
                     echo'document.getElementById("modifier").style.display="block";';
@@ -59,15 +73,30 @@
                 ?>
             }
         }
+        function affiche_donnees() {
+            if((document.getElementById("liste_donnees"))){
+                if (document.getElementById("liste_donnees").style.display=="block"){
+                    document.getElementById("liste_donnees").style.display="none";
+                    document.getElementById("btn_plus_moins").value="▼ Voir plus ▼";
+                }
+                else{
+                    document.getElementById("liste_donnees").style.display="block";
+                    document.getElementById("btn_plus_moins").value="▲ Voir moins ▲"
+                }  
+            }
+        }
     </script>
     <div id="bandeau">
         <ul>
             <li class="utilisateur">
-                <?php 
-                    echo '<p onclick="affiche_bandeau()" id="nom">';
-                    echo $_SESSION['identifiant'];
-                    echo '</p>';
-                ?>
+                <div id="div_nom_logo" onclick="affiche_bandeau()">
+                    <?php 
+                        echo '<p id="nom">';
+                        echo $_SESSION['identifiant'];
+                        echo '</p>';
+                    ?>
+                    <p id="logo_bandeau">▼</p>
+                </div>
                 <ul id="deroulant">
                     <li>
                         <input type="button" id="deco" value="déconnexion" onclick="deco()">
@@ -105,6 +134,7 @@
                     $id_compte = $_SESSION['id'];
                     $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte");
                 }
+                $iteration =0;
                 while ($row = pg_fetch_row($sql_cap)) {
                     if ($row[0] == $id_cap){
                         echo '<option selected value="';
@@ -116,6 +146,7 @@
                     echo '">';
                     echo $row[1];
                     echo '</option>';
+                    $iteration +=1;
                 }
                 ?>
             </select>
@@ -162,25 +193,55 @@
         else{
             $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
         }
+        $premier = 0;
         while ($row = pg_fetch_row($sql)) {
             $x = $row[3];
-            $y = $row[2];        
-            echo '<div class="donnees">';
-            if ($id_date == "tout"){
-                $date = $row[5];
-                $date_form = date('j/n/Y G\Hi s\s', strtotime($date));
-                echo '<p class="coordonnees">Le ';
-                echo $date_form;
-                echo '</p>';
+            $y = $row[2];
+            if ($premier ==1){
+                echo('<ul id="liste_donnees">');
             }
-            echo'<p class="coordonnees">x = ';
-            echo $row[3];
-            echo '</p>';
-            echo '</p>';
-            echo '<p class="coordonnees">y = ';
-            echo $row[2];
-            echo '</div>';
+            if ($premier ==0 ){
+                echo '<div class="donnees">';
+                if ($id_date == "tout"){
+                    $date = $row[5];
+                    $date_form = date('j/n/Y G\Hi s\s', strtotime($date));
+                    echo '<p class="coordonnees">Le ';
+                    echo $date_form;
+                    echo '</p>';
+                }
+                echo'<p class="coordonnees">x = ';
+                echo $row[3];
+                echo '</p>';
+                echo '</p>';
+                echo '<p class="coordonnees">y = ';
+                echo $row[2];
+                echo '</div>';
+            }        
+            else{
+                echo('<li>');
+                echo '<div class="donnees">';
+                if ($id_date == "tout"){
+                    $date = $row[5];
+                    $date_form = date('j/n/Y G\Hi s\s', strtotime($date));
+                    echo '<p class="coordonnees">Le ';
+                    echo $date_form;
+                    echo '</p>';
+                }
+                echo'<p class="coordonnees">x = ';
+                echo $row[3];
+                echo '</p>';
+                echo '</p>';
+                echo '<p class="coordonnees">y = ';
+                echo $row[2];
+                echo '</div>';
+                echo('</li>');
+            }
+            $premier +=1;
             
+        }
+        if ($premier != 1){
+            echo('</ul>');
+            echo('<div class="donnees"><input type="button" value="▼ Voir plus ▼" id="btn_plus_moins" onclick="affiche_donnees()"></div>');
         }
         ?>
         </style>
@@ -220,7 +281,7 @@
                         echo '],';
                     }
                 }
-        ?>
+            ?>
         ]).addTo(map);
     </script>
     </div>
