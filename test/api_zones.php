@@ -1,6 +1,8 @@
 <?php
 header('Content-Type: application/json');
 
+require_once __DIR__ . '/config.php';
+
 if (!empty($_COOKIE['id'])){
     $id = $_COOKIE['id'];
 }
@@ -18,7 +20,7 @@ else{
     $mdp = null;
 }
 
-$db_connection = pg_connect("host=10.247.80.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+$db_connection = db_connect_with($id, $mdp);
 if (!$db_connection) {
     http_response_code(500);
     echo json_encode(['error' => 'Database connection failed']);

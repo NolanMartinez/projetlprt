@@ -42,7 +42,8 @@
         else{
             $mdp= null;
         }
-        $db_connection = pg_connect("host=172.16.167.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+        require_once __DIR__ . '/config.php';
+        $db_connection = db_connect_with($id, $mdp);
         if (!$db_connection) {
             echo "An error occurred.\n";
             exit;
@@ -170,7 +171,8 @@
             <?php endif; ?>
         </script>
 
-        <script src="script_maps.js"></script>
+            <p><a href="page_modif.php">Modifier la zone</a></p>
+            <script src="script_maps_vue.js"></script>
     </div>
 </body>
 </html>

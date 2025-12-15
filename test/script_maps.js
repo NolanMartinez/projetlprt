@@ -45,8 +45,11 @@ document.addEventListener("DOMContentLoaded", function () {
     
     function saveZoneToDatabase() {
         var center = geofence.getLatLng();
+        var idCapEl = document.getElementById('capteur');
+        var idCap = idCapEl ? idCapEl.value : null;
         var zoneData = {
             id_zone: currentZoneId || 0,
+            id_capteur: idCap,
             latitude: center.lat,
             longitude: center.lng,
             radius: geofence.getRadius()
