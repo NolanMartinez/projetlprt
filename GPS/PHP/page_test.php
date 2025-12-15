@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="../CSS/style.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
 </head>
 <body >
-    <script src="script_page.js"></script>
+    <script src="../JS/script_page.js"></script>
     <?php
         include ( "variable.php");
         include( "demare_session.php");
@@ -238,7 +238,7 @@
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""
         ></script>
-    <script src="script_maps.js"></script>
+    <script src="../JS/script_maps.js"></script>
     <script>
         <?php
         if ($id_date == 'defaut' or $id_date == "tout"){

@@ -10,7 +10,7 @@
     }
     else{
         session_destroy();
-        $url = '../test';
+        $url = '../PHP';
 		header('Location: '.$url);;
     }
 ?>

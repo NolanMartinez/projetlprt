@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Projet GPS</title>
-    <link rel="stylesheet" href="style_index.css" />
+    <link rel="stylesheet" href="../CSS/style_index.css" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -83,6 +83,6 @@
             <input type="submit" value="Se connecter" class="bouton-connection">
         </form>
     </div>
-        <script src="script.js"></script>
+        <script src="../JS/script.js"></script>
 </body>
 </html>
