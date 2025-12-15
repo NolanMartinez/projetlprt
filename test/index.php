@@ -15,7 +15,7 @@
                 $id = !empty($_COOKIE['id']) ? $_COOKIE['id'] : null;
                 $mdp = !empty($_COOKIE['mdp']) ? $_COOKIE['mdp'] : null;
                 if ($id !== null && $mdp !== null) {
-                    $db_connection = @pg_connect("host=10.247.80.226 port=5432 dbname=projet_gps user=$id password=$mdp");
+                    $db_connection = @pg_connect("host=172.16.167.226 port=5432 dbname=projet_gps user=$id password=$mdp");
                     
                     if (!$db_connection) {
                         $erreur = true;
