@@ -35,6 +35,7 @@ body {
     margin: 0;
     font-weight: 600;
     margin-left: auto;
+    cursor: pointer;
 }
 
 #deco {
@@ -205,6 +206,9 @@ body {
 #deroulant{
     display: none;
     margin-top: 10px;
+}
+#btn_adj_donnees{
+    display: none;
 }
 #deroulant a{
     color: #1e3c72;

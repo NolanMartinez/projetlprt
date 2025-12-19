@@ -114,10 +114,10 @@
                         <p><a href="page.php">Visualiser</a></p>
                     </li>
                     <li class="sous_menus" id="modifier">
-                        <p>Ajouter</p>
+                        <p>Ajouter/Modifier</p>
                         <ul class="element_modifier">
                             <li><a href="#">Zones</a></li>
-                            <li><a href="#">Capteur</a></li>
+                            <li><a href="page_modif_capteur.php">Capteur</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -130,11 +130,11 @@
             <select id="capteur" name="capteur">
                 <?php
                 if ($_SESSION['droit'] == "admin"){
-                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur");
+                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur WHERE actif = 't' ORDER BY id_capteur");
                 }
                 else{
                     $id_compte = $_SESSION['id'];
-                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte");
+                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte AND actif = 't' ORDER BY id_capteur");
                 }
                 while ($row = pg_fetch_row($sql_cap)) {
                     if ($row[0] == $id_cap){

@@ -33,11 +33,11 @@
         exit;
         }
         if ($_SESSION['droit'] == "admin"){
-            $sql_cap = pg_query($db_connection, "SELECT * FROM capteur LIMIT 1");
+            $sql_cap = pg_query($db_connection, "SELECT * FROM capteur WHERE actif = 't' LIMIT 1");
         }
         else{
             $id_compte = $_SESSION['id'];
-            $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte LIMIT 1");
+            $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte AND actif = 't' LIMIT 1");
         }
         while ($row = pg_fetch_row($sql_cap)) {
             if($id_cap == "erreur"){
@@ -58,9 +58,10 @@
             else{
                 document.getElementById("deroulant").style.display="block";
                 document.getElementById("logo_bandeau").innerHTML="▲";
+                document.getElementById("modifier").style.display="block";
                 <?php
                 if ($_SESSION['droit'] != "voir"){
-                    echo'document.getElementById("modifier").style.display="block";';
+                    echo'document.getElementById("btn_adj_donnees").style.display="block";';
                 }
                 ?>
             }
@@ -94,11 +95,11 @@
                         <input type="button" id="deco" value="déconnexion" onclick="deco()">
                     </li>
                     <li class="sous_menus" id="modifier">
-                        <p>Ajouter</p>
+                        <p>Ajouter/Modifier</p>
                         <ul class="element_modifier">
                             <li><a href="#">Zones</a></li>
-                            <li><a href="#">Capteur</a></li>
-                            <li><a href="page_ajout.php">Données</a></li>
+                            <li><a href="page_modif_capteur.php">Capteur</a></li>
+                            <li><a href="page_ajout.php" id="btn_adj_donnees">Données</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -120,11 +121,11 @@
             <select id="capteur" name="capteur" onchange="envoie_cap()">
                 <?php
                 if ($_SESSION['droit'] == "admin"){
-                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur");
+                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur WHERE actif = 't' ORDER BY id_capteur");
                 }
                 else{
                     $id_compte = $_SESSION['id'];
-                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte");
+                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte AND actif = 't' ORDER BY id_capteur");
                 }
                 $iteration =0;
                 while ($row = pg_fetch_row($sql_cap)) {
