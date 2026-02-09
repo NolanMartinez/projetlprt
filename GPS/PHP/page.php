@@ -59,6 +59,7 @@
                 document.getElementById("deroulant").style.display="block";
                 document.getElementById("logo_bandeau").innerHTML="▲";
                 document.getElementById("modifier").style.display="block";
+                document.getElementById("mon_compte").style.display="block";
                 <?php
                 if ($_SESSION['droit'] != "voir"){
                     echo'document.getElementById("btn_adj_donnees").style.display="block";';
@@ -94,6 +95,7 @@
                     <li>
                         <input type="button" id="deco" value="déconnexion" onclick="deco()">
                     </li>
+                    <li class="sous_menus" id="mon_compte"><p><a href="page_compte.php">Mon compte</a></p></li>
                     <li class="sous_menus" id="modifier">
                         <p>Ajouter/Modifier</p>
                         <ul class="element_modifier">
@@ -121,11 +123,11 @@
             <select id="capteur" name="capteur" onchange="envoie_cap()">
                 <?php
                 if ($_SESSION['droit'] == "admin"){
-                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur WHERE actif = 't' ORDER BY id_capteur");
+                    $sql_cap = pg_query($db_connection, "SELECT id_capteur, nom, nom_d_utilisateur FROM capteur INNER JOIN compte ON capteur.proprietaire = compte.id_compte WHERE actif = 't' ORDER BY id_capteur");
                 }
                 else{
                     $id_compte = $_SESSION['id'];
-                    $sql_cap = pg_query($db_connection, "SELECT * FROM capteur INNER JOIN capteur_compte USING (id_capteur) WHERE id_compte = $id_compte AND actif = 't' ORDER BY id_capteur");
+                    $sql_cap = pg_query($db_connection, "SELECT id_capteur, nom, nom_d_utilisateur, proprietaire FROM capteur INNER JOIN capteur_compte USING (id_capteur) INNER JOIN compte ON capteur.proprietaire = compte.id_compte WHERE capteur_compte.id_compte = $id_compte AND actif = 't' ORDER BY id_capteur");
                 }
                 $iteration =0;
                 while ($row = pg_fetch_row($sql_cap)) {
@@ -138,6 +140,11 @@
                     echo $row[0];
                     echo '">';
                     echo $row[1];
+                    if ($_SESSION['droit'] == "admin" || $id_compte != $row[3]){
+                        echo ' (';
+                        echo $row[2];
+                        echo ')';
+                    }
                     echo '</option>';
                     $iteration +=1;
                 }

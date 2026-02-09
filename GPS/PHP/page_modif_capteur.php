@@ -100,12 +100,12 @@
             $id_capteur_compte += 1;
             $db_connection_envoie = pg_connect("host=$ip port=5432 dbname=projet_gps user=envoie password=script"); 
             $sql_envoie = pg_query($db_connection_envoie, "INSERT INTO capteur_compte (id_capteur_compte, id_compte, id_capteur)VALUES ($id_capteur_compte, $id_compte_ajout_suppr, $id_cap)");
-            alert("le capteur à été associer à l'utilisateur");
+            alert("le capteur à été associer à l\'utilisateur");
         }
         elseif ($id_cap and $id_compte_ajout_suppr and $suppr_ajout == 'suppr'){
             $db_connection_envoie = pg_connect("host=$ip port=5432 dbname=projet_gps user=supprimeur password=jaimesuppr");
             $sql_envoie = pg_query($db_connection_envoie, "DELETE FROM capteur_compte WHERE id_compte =$id_compte_ajout_suppr and id_capteur = '$id_cap'");
-            alert("le capteur à été dissocier à l'utilisateur");
+            alert("le capteur à été dissocier à l\'utilisateur");
         }
         elseif ($id_cap and $id_cap != "nouveau" and $id_compte_ajout_suppr and $suppr_ajout == 'renommer'){
             $db_connection_envoie = pg_connect("host=$ip port=5432 dbname=projet_gps user=edit password=edit2000");
@@ -156,6 +156,7 @@
                 document.getElementById("deroulant").style.display="block";
                 document.getElementById("logo_bandeau").innerHTML="▲";
                 document.getElementById("modifier").style.display="block";
+                document.getElementById("mon_compte").style.display="block";
                 <?php
                 if ($_SESSION['droit'] != "voir"){
                     echo'document.getElementById("btn_adj_donnees").style.display="block";';
@@ -207,6 +208,7 @@
                     <li>
                         <input type="button" id="deco" value="déconnexion" onclick="deco()">
                     </li>
+                    <li class="sous_menus" id="mon_compte"><p><a href="page_compte.php">Mon compte</a></p></li>
                     <li class="sous_menus" id="visualiser">
                         <p><a href="page.php">Visualiser</a></p>
                     </li>
@@ -337,21 +339,26 @@
                                 echo('</tr>');
                                 $text_sql_ajout .= " and id_compte !='$id_compte_acces' and id_compte !=".$row[2];
                             }
-                            echo'<tr>';
+                            echo'<tr class="zone_adj_acces">';
                             echo'<td><select name="new_compte_acces" id="new_compte_acces"';
                             if ($actif == 'f'){
                                 echo(' disabled ');
                             }
                             echo'>';
                             $sql_ajout = pg_query($db_connection, $text_sql_ajout);
+                            $nb_boucle_select =0;
                             while ($row = pg_fetch_row($sql_ajout)) {
                                 echo '<option value="';
                                 echo $row[0];
                                 echo '">';
                                 echo $row[1];
                                 echo '</option>';
+                                $nb_boucle_select +=1;
                             }
                             echo'</select></td>';
+                            if ($nb_boucle_select == 0){
+                                echo('<style> .zone_adj_acces{ display: none;}</style>');
+                            }
                             echo('<td><input type="button" value="ajouter"  class="bouton" onclick="ajout()"');
                             if ($actif == 'f'){
                                 echo(' disabled ');
