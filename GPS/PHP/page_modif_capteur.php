@@ -19,7 +19,8 @@
         function alert($msg) {
             echo "<script type='text/javascript'>alert('$msg');</script>";
         }
-
+        $id_zone_actu = null;
+        $id_proprio = null;
         if (!empty($_POST['capteur'])){
             $id_cap = $_POST['capteur'];
         }
@@ -56,6 +57,13 @@
                 else{
                     $id_compte_ajout_suppr = "";
                 }
+            }elseif($suppr_ajout == 'modif_zone'){
+                if(!empty($_POST['zone'])){
+                    $id_compte_ajout_suppr = $_POST['zone'];
+                }
+                else{
+                    $id_compte_ajout_suppr = "";
+                }
             }
         }
         else{
@@ -72,6 +80,16 @@
             $url = '../test';
 			//header('Location: '.$url);
 		}
+        if ($suppr_ajout == 'renommer' and $id_cap == "nouveau"){
+            if(!empty($_POST['zone'])){
+                    $id_new_zone = $_POST['zone'];
+                }
+                else{
+                    $id_new_zone = "";
+                }
+        }else{
+            $id_new_zone="";
+        }
 
         $db_connection = pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
         if (!$db_connection) {
@@ -111,8 +129,19 @@
             $db_connection_envoie = pg_connect("host=$ip port=5432 dbname=projet_gps user=edit password=edit2000");
             $sql_envoie = pg_query($db_connection_envoie, "UPDATE capteur SET nom = '$id_compte_ajout_suppr' WHERE id_capteur = '$id_cap'");
             alert("le capteur à été renommé en $id_compte_ajout_suppr");
+        }elseif($id_cap and $id_cap != "nouveau" and $id_compte_ajout_suppr and $suppr_ajout == 'modif_zone'){
+            $db_connection_envoie = pg_connect("host=$ip port=5432 dbname=projet_gps user=edit password=edit2000");
+            if($id_compte_ajout_suppr == "Null"){
+                $sql_envoie = pg_query($db_connection_envoie, "UPDATE capteur SET id_zone = Null WHERE id_capteur = '$id_cap'");
+                alert("le capteur est associé à aucunes zone");
+            }
+            else{
+                $sql_envoie = pg_query($db_connection_envoie, "UPDATE capteur SET id_zone = '$id_compte_ajout_suppr' WHERE id_capteur = '$id_cap'");
+                alert("le capteur à été associé à la zone numéro : $id_compte_ajout_suppr");
+            }
+            
         }
-        elseif ($id_cap and $id_cap == "nouveau" and $id_compte_ajout_suppr and $suppr_ajout == 'renommer'){
+        elseif ($id_cap and $id_cap == "nouveau" and $id_compte_ajout_suppr and $id_new_zone and $suppr_ajout == 'renommer'){
             $id_compte = $_SESSION['id'];
             $sql_id = pg_query($db_connection, "SELECT id_capteur FROM capteur ORDER BY id_capteur");
             while ($row = pg_fetch_row($sql_id)) {
@@ -125,7 +154,11 @@
             }
             $id_capteur_compte += 1;
             $db_connection_envoie = pg_connect("host=$ip port=5432 dbname=projet_gps user=envoie password=script");
-            $sql_envoie = pg_query($db_connection_envoie, "INSERT INTO capteur (id_capteur, nom, proprietaire, actif)VALUES ($id_capteur, '$id_compte_ajout_suppr', $id_compte,'true')");
+            if ($id_new_zone == "Null"){
+                $sql_envoie = pg_query($db_connection_envoie, "INSERT INTO capteur (id_capteur, nom, proprietaire, actif)VALUES ($id_capteur, '$id_compte_ajout_suppr', $id_compte,'true')");
+            }else{
+                $sql_envoie = pg_query($db_connection_envoie, "INSERT INTO capteur (id_capteur, nom, proprietaire, actif,id_zone)VALUES ($id_capteur, '$id_compte_ajout_suppr', $id_compte,'true',$id_new_zone)");
+            }
             $sql_envoie = pg_query($db_connection_envoie, "INSERT INTO capteur_compte (id_capteur_compte, id_compte, id_capteur)VALUES ($id_capteur_compte, $id_compte, $id_capteur)");
             alert("le capteur $id_compte_ajout_suppr à été Crée");
             $id_cap = $id_capteur;
@@ -180,6 +213,10 @@
             document.getElementById("suppr/ajout").value='renommer';
             document.forms["info"].submit();
         }
+        function modif_zone() {
+            document.getElementById("suppr/ajout").value='modif_zone';
+            document.forms["info"].submit();
+        }
         function desactiver(){
             document.getElementById("suppr/ajout").value='activer_desactiver';
             if (document.getElementById("actif_btn").value == "Activer le capteur"){
@@ -229,11 +266,11 @@
             <select id="capteur" name="capteur" onchange="envoie_cap()">
                 <?php
                 if ($_SESSION['droit'] == "admin"){
-                    $sql_cap = pg_query($db_connection, "SELECT id_capteur,nom,actif,nom_d_utilisateur FROM capteur INNER JOIN compte ON capteur.proprietaire = Compte.id_compte ORDER BY id_capteur");
+                    $sql_cap = pg_query($db_connection, "SELECT id_capteur,nom,actif,id_zone,proprietaire,nom_d_utilisateur FROM capteur INNER JOIN compte ON capteur.proprietaire = Compte.id_compte ORDER BY id_capteur");
                 }
                 else{
                     $id_compte = $_SESSION['id'];
-                    $sql_cap = pg_query($db_connection, "SELECT id_capteur,nom,actif FROM capteur WHERE proprietaire = $id_compte");
+                    $sql_cap = pg_query($db_connection, "SELECT id_capteur,nom,actif,id_zone,proprietaire FROM capteur WHERE proprietaire = $id_compte");
                     echo('<option value="nouveau">Nouveau capteur</option>)');
                 }
                 $nb_boucle = 0;
@@ -241,6 +278,8 @@
                     if ($row[0] == $id_cap){
                         if($id_cap != "nouveau"){
                             $actif = $row[2];
+                            $id_zone_actu = $row[3];
+                            $id_proprio = $row[4];
                         }
                         echo '<option selected value="';
                     }
@@ -252,7 +291,7 @@
                     echo $row[1];
                     if ($_SESSION['droit'] == "admin"){
                         echo(' (');
-                        echo($row[3]);
+                        echo($row[5]);
                         echo(')');
                     }
                     echo '</option>';
@@ -263,6 +302,32 @@
                 }
                 ?>
             </select>
+            <div id='zonne'>
+                <label for="zone">Zone associer :</label>
+                <br>
+                <select id="zone" name="zone">
+                    <option value="Null">Aucunes</option>
+                    <?php
+                        $sql_zone = pg_query($db_connection, "SELECT * FROM zones");
+                        while ($row = pg_fetch_row($sql_zone)) {
+                            if($id_cap != "nouveau" && $id_zone_actu == $row[0]){
+                                echo('<option selected value="');
+                            }else{
+                                echo('<option value="');
+                            }
+                            echo($row[0]);
+                            echo('">');
+                            echo($row[1]);
+                            echo('</option>');
+                        }
+                    ?>
+                </select>
+                <?php
+                    if($id_cap != "nouveau"){
+                        echo('<input type="button" value="modifier" id="btn_zone" onclick="modif_zone()">');
+                    }
+                ?>
+            </div>
             <div id='renommer'>
                 <?php
                     echo('<input type="text" name="nouveau_nom" id="nouveau_nom" placeholder="');
@@ -312,7 +377,7 @@
                         if($id_cap != "nouveau"){
                             $id = $_SESSION['id'];
                             $text_sql_ajout = "SELECT id_compte,nom_d_utilisateur FROM compte 
-                            WHERE droit != 'admin' AND id_compte !=$id ";
+                            WHERE droit != 'admin' AND id_compte !=$id_proprio ";
                             
                             $sql = pg_query($db_connection, "SELECT id_compte,nom_d_utilisateur,proprietaire FROM capteur_compte 
                             INNER JOIN capteur USING(id_capteur) 
@@ -337,7 +402,7 @@
                                 }
                                 echo('></td>');
                                 echo('</tr>');
-                                $text_sql_ajout .= " and id_compte !='$id_compte_acces' and id_compte !=".$row[2];
+                                $text_sql_ajout .= " and id_compte !='$id_compte_acces'";
                             }
                             echo'<tr class="zone_adj_acces">';
                             echo'<td><select name="new_compte_acces" id="new_compte_acces"';

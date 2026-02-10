@@ -46,6 +46,7 @@
                         exit;
                     }
                     $sql_compte = pg_query($db_connection, "SELECT mdp_hash, droit, id_compte FROM compte WHERE nom_d_utilisateur = '$id'");
+                        $i =0;
                         while ($row = pg_fetch_row($sql_compte)) {
                             if ($row[0] == $mdp_hash){
                                 session_start();
@@ -59,10 +60,14 @@
                             else{
                                 $erreur = true;
                             }
-                }
+                            $i++;
+                        }
+                        if ($i == 0){
+                            $erreur = true;
+                        }
                 }
                 else{
-                    $erreur = true;
+                    $erreur = false;
                 }
             ?>
 
