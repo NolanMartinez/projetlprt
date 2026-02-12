@@ -8,6 +8,7 @@
     cursor: pointer;
     transition: all 0.3s ease;
     align-self: flex-start;
+    margin-top: 5px;
 }
 .bouton:hover {
     transform: translateY(-2px);
@@ -24,6 +25,7 @@
     transition: all 0.3s ease;
     align-self: flex-start;
     margin-left: 3%;
+    margin-top: 5px;
 }
 #btn_zone:hover{
     transform: translateY(-2px);
