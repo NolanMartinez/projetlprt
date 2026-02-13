@@ -12,6 +12,7 @@
 <body >
     <script src="../JS/script_page.js"></script>
     <?php
+        $id_zone;
         include ( "variable.php");
         include( "demare_session.php");
         if (!empty($_POST['capteur'])){
@@ -80,6 +81,7 @@
             }
         }
     </script>
+    <div id="zoneAlert" class="hidden">Capteur hors de la zone !</div>
     <div id="bandeau">
         <ul>
             <li class="utilisateur">
@@ -123,15 +125,17 @@
             <select id="capteur" name="capteur" onchange="envoie_cap()">
                 <?php
                 if ($_SESSION['droit'] == "admin"){
-                    $sql_cap = pg_query($db_connection, "SELECT id_capteur, nom, nom_d_utilisateur FROM capteur INNER JOIN compte ON capteur.proprietaire = compte.id_compte WHERE actif = 't' ORDER BY id_capteur");
+                    $sql_cap = pg_query($db_connection, "SELECT id_capteur, nom, nom_d_utilisateur, id_zone FROM capteur INNER JOIN compte ON capteur.proprietaire = compte.id_compte WHERE actif = 't' ORDER BY id_capteur");
                 }
                 else{
                     $id_compte = $_SESSION['id'];
-                    $sql_cap = pg_query($db_connection, "SELECT id_capteur, nom, nom_d_utilisateur, proprietaire FROM capteur INNER JOIN capteur_compte USING (id_capteur) INNER JOIN compte ON capteur.proprietaire = compte.id_compte WHERE capteur_compte.id_compte = $id_compte AND actif = 't' ORDER BY id_capteur");
+                    $sql_cap = pg_query($db_connection, "SELECT id_capteur, nom, nom_d_utilisateur, id_zone, proprietaire FROM capteur INNER JOIN capteur_compte USING (id_capteur) INNER JOIN compte ON capteur.proprietaire = compte.id_compte WHERE capteur_compte.id_compte = $id_compte AND actif = 't' ORDER BY id_capteur");
                 }
                 $iteration =0;
                 while ($row = pg_fetch_row($sql_cap)) {
                     if ($row[0] == $id_cap){
+                        $id_zone =$row[3];
+                        echo $id_zone;
                         echo '<option selected value="';
                     }
                     else{
@@ -140,7 +144,7 @@
                     echo $row[0];
                     echo '">';
                     echo $row[1];
-                    if ($_SESSION['droit'] == "admin" || $id_compte != $row[3]){
+                    if ($_SESSION['droit'] == "admin" || $id_compte != $row[4]){
                         echo ' (';
                         echo $row[2];
                         echo ')';
@@ -266,6 +270,9 @@
             echo ', ';
             echo $row[2];
             echo ']).addTo(map);';
+
+            echo "var currentLat = " . $row[3] . ";\n";
+            echo "var currentLng = " . $row[2] . ";\n";
         }
         ?>
         var polyline = L.polyline([
@@ -283,8 +290,20 @@
                 }
             ?>
         ]).addTo(map);
+        <?php
+        if ($id_zone){
+            $sql_zone = pg_query($db_connection, "SELECT * FROM zones WHERE Id_zone = '$id_zone'");
+
+                while ($row = pg_fetch_row($sql_zone)) {
+                    echo ("var id_z =".$id_zone.";");
+                    echo ("var lat_cookie =".$row[2].";");
+                    echo ("var lng_cookie =".$row[3].";");
+                    echo ("var radius_cookie =".$row[4].";");
+                }
+        }
+    ?>
     </script>
-    <script src="test/script_maps_vue.js"></script>
+    <script src="../JS/script_maps_vue.js"></script>
     </div>
 </body>
 </html>

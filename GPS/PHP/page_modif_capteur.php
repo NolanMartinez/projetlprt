@@ -308,7 +308,7 @@
                 <select id="zone" name="zone">
                     <option value="Null">Aucunes</option>
                     <?php
-                        $sql_zone = pg_query($db_connection, "SELECT * FROM zones");
+                        $sql_zone = pg_query($db_connection, "SELECT * FROM zones ORDER BY id_zone");
                         while ($row = pg_fetch_row($sql_zone)) {
                             if($id_cap != "nouveau" && $id_zone_actu == $row[0]){
                                 echo('<option selected value="');

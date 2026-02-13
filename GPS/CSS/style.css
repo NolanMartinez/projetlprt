@@ -247,6 +247,26 @@ body {
 #logo_bandeau{
     padding-left: 10px;
 }
+#zoneAlert {
+    position: absolute;
+    top: 80px; 
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e74c3c;
+    color: white;
+    font-weight: 600;
+    padding: 12px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 10000;
+    font-size: 14px;
+    text-align: center;
+    pointer-events: none;
+}
+
+#zoneAlert.hidden {
+    display: none;
+}
 @keyframes fadeInUp {
     from {
         opacity: 0;

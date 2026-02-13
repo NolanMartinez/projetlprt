@@ -15,6 +15,7 @@
 
     <script src="script_page.js"></script>
     <?php
+        $id_zone;
         if (!empty($_POST['capteur'])){
             $id_cap = $_POST['capteur'];
         }
@@ -75,7 +76,8 @@
                 $sql_cap = pg_query($db_connection, "SELECT * FROM capteur");
                 while ($row = pg_fetch_row($sql_cap)) {
                     if ($row[0] == $id_cap){
-                        setcookie('id_zone',$row[4]);
+                        $id_zone =$row[4];
+                        setcookie("id_zone", $id_zone);
                         echo '<option selected value="';
                     }
                     else{
@@ -162,6 +164,8 @@
                 echo ', ';
                 echo $row[2];
                 echo ']).addTo(map);';
+                echo "var currentLat = " . $row[3] . ";\n";
+                echo "var currentLng = " . $row[2] . ";\n";
             }
             ?>
             var polyline = L.polyline([
@@ -180,7 +184,17 @@
                 ?>
             ]).addTo(map);
         </script>
+            <?php
+                if ($id_zone){
+                    $sql_zone = pg_query($db_connection, "SELECT * FROM zones WHERE Id_zone = '$id_zone'");
 
+                        while ($row = pg_fetch_row($sql_zone)) {
+                            setcookie("latitude", $row[2]);
+                            setcookie("longitude", $row[3]);
+                            setcookie("radius", $row[4]);
+                        }
+                }
+            ?>
             <p><a href="page_modif.php">Modifier la zone</a></p>
             <script src="script_maps_vue.js"></script>
     </div>

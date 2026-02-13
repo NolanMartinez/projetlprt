@@ -13,10 +13,8 @@ function getCookie(cname) {
         }
         return "";
     }
-var id_z = getCookie('id_zone');
-var lat_cookie = getCookie('latitude');
-var lng_cookie = getCookie('longitude');
-var radius_cookie = getCookie('radius');
+
+
 
 
 if (id_z && lat_cookie && lng_cookie && radius_cookie){
@@ -43,38 +41,7 @@ var centerMarker = L.marker(geofence.getLatLng(), {
     draggable: false,
     icon: zoneIcon
 }).addTo(map);
-function loadZoneFromDatabase(id) {
-    if(id){
-        fetch('api_zones.php/?id=' + id, { method: 'GET' })
-        .then(response => {
-            if (!response.ok) {
-                console.error('Réponse HTTP zones:', response.status);
-                return;
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (!data) return;
-            if (Array.isArray(data) && data.length > 0) {
-                var zone = data[0];
-                var lat = parseFloat(zone.latitude);
-                var lng = parseFloat(zone.longitude);
-                var r = parseFloat(zone.radius);
-                if (!isNaN(lat) && !isNaN(lng)) {
-                    geofence.setLatLng([lat, lng]);
-                    centerMarker.setLatLng([lat, lng]);
-                }
-                if (!isNaN(r)) geofence.setRadius(r);
-                console.log('Zone view chargée:', zone);
-            } else {
-                console.log('Aucune zone trouvée (view)');
-            }
-        })
-        .catch(err => console.error('Erreur fetch zones (view):', err));
-    }
-}
 
-loadZoneFromDatabase(id_z);
 
 function updateZoneStatus() {
     var alertBox = document.getElementById("zoneAlert");
