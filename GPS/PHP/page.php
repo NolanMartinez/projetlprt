@@ -284,6 +284,7 @@
             ?>
         ]).addTo(map);
     </script>
+    <script src="test/script_maps_vue.js"></script>
     </div>
 </body>
 </html>
