@@ -129,52 +129,13 @@ if (!$db_connection) {
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <script>
-        <?php
-        if ($id_date == 'defaut' || $id_date == "tout") {
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees DESC LIMIT 1");
-        } else {
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_donnees = '$id_date'");
-        }
-        $row = pg_fetch_row($sql);
-        if ($row) {
-            echo "var currentLat = " . $row[3] . ";\n";
-            echo "var currentLng = " . $row[2] . ";\n";
-        } else {
-            echo "var currentLat = 46.75; var currentLng = 1.7;";
-        }
-        ?>
-
-        <?php if ($id_date == "tout"): ?>
-        var polylinePoints = [
-            <?php
-            $sql = pg_query($db_connection, "SELECT * FROM donnees WHERE Id_capteur = '$id_cap' ORDER BY Id_donnees");
-            while ($row = pg_fetch_row($sql)) {
-                echo "[" . $row[3] . ", " . $row[2] . "],";
-            }
-            ?>
-        ];
-        <?php endif; ?>
-    </script>
+    
 
     <script src="script_maps.js"></script>
 </div>
 
 <script>
   const capteurId = "<?php echo addslashes($id_cap); ?>";
-  const source = new EventSource("GPS/PHP/test/alert_stream.php?capteur=" + capteurId);
-
-  source.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    const alertBox = document.getElementById("zoneAlert");
-    if (data.alert === true) {
-      alertBox.classList.remove("hidden");
-      alertBox.textContent = "Capteur hors de la zone !";
-    } else {
-      alertBox.classList.add("hidden");
-      alertBox.textContent = "";
-    }
-  };
 
   source.onerror = function() {
     console.log("Connexion SSE perdue...");

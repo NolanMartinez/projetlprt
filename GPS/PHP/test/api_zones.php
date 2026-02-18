@@ -3,24 +3,9 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/config.php';
 
-if (!empty($_COOKIE['id'])){
-    $id = $_COOKIE['id'];
-}
-else{
-    $id = null;
-    http_response_code(401);
-    echo json_encode(['error' => 'Unauthorized']);
-    exit;
-}
 
-if (!empty($_COOKIE['mdp'])){
-    $mdp = $_COOKIE['mdp'];
-}
-else{
-    $mdp = null;
-}
 
-$db_connection = db_connect_with($id, $mdp);
+$db_connection = pg_connect("host=$ip port=5432 dbname=projet_gps user=utilisateur password=utilisateur");
 if (!$db_connection) {
     http_response_code(500);
     echo json_encode(['error' => 'Database connection failed']);
@@ -80,6 +65,12 @@ if ($method === 'GET') {
 }
 
 elseif ($method === 'POST') {
+    $db_connection = pg_connect("host=$ip port=5432 dbname=projet_gps user=edit password=edit2000");
+    if (!$db_connection) {
+        http_response_code(500);
+        echo json_encode(['error' => 'Database connection failed']);
+        exit;
+    }
     $data = json_decode(file_get_contents('php://input'), true);
     
     if (!isset($data['latitude']) || !isset($data['longitude']) || !isset($data['radius'])) {

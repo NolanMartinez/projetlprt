@@ -1,31 +1,15 @@
-document.addEventListener("DOMContentLoaded", function () {
 
-    var map = L.map("map").setView([46.75, 1.7], 6);
 
-    var Stadia_OSMBright = L.tileLayer(
-        "https://tiles.stadiamaps.com/tiles/osm_bright/{z}/{x}/{y}{r}.png",
-        {
-            maxZoom: 20,
-            attribution:
-                '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, ' +
-                '&copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> ' +
-                '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
-        }
-    );
-
-    Stadia_OSMBright.addTo(map);
-
-    var geofence = L.circle([50.32077, 3.5134], {
+    var geofence = L.circle([lat_cookie, lng_cookie], {
         color: "blue",
         fillColor: "#2a5298",
         fillOpacity: 0.2,
-        radius: 50000
+        radius: radius_cookie
     }).addTo(map);
     
     var currentZoneId = null;
     var isDragging = false;
     
-    var marker = L.marker([currentLat, currentLng]).addTo(map);
 
     var zoneIcon = L.divIcon({
         className: "zone-marker-icon",
@@ -36,20 +20,14 @@ document.addEventListener("DOMContentLoaded", function () {
         draggable: true,
         icon: zoneIcon
     }).addTo(map);
-
-    function isInZone(lat, lng) {
-        var point = L.latLng(lat, lng);
-        var center = geofence.getLatLng();
-        return point.distanceTo(center) <= geofence.getRadius();
-    }
     
     function saveZoneToDatabase() {
         var center = geofence.getLatLng();
         var idCapEl = document.getElementById('capteur');
-        var idCap = idCapEl ? idCapEl.value : null;
+        //var idCap = idCapEl ? idCapEl.value : null;
         var zoneData = {
             id_zone: currentZoneId || 0,
-            id_capteur: idCap,
+
             latitude: center.lat,
             longitude: center.lng,
             radius: geofence.getRadius()
@@ -57,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
         
         console.log('Envoi zone:', zoneData);
         
-        fetch('api_zones.php', {
+        fetch('test/api_zones.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -84,9 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error('Erreur lors de la sauvegarde:', error));
     }
     
-    function loadZonesFromDatabase() {
+    function loadZonesFromDatabase(id) {
         console.log('Chargement des zones...');
-        fetch('api_zones.php', {
+        fetch('test/api_zones.php/?id=' + id, {
             method: 'GET'
         })
         .then(response => {
@@ -118,46 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let alreadyAlerted = false;
     
-    loadZonesFromDatabase();
-
-    function updateZoneStatus() {
-        var alertBox = document.getElementById("zoneAlert");
-        var markerEl = marker.getElement();
-
-        if (isInZone(currentLat, currentLng)) {
-
-            geofence.setStyle({
-                color: "blue",
-                fillColor: "#2a5298",
-                fillOpacity: 0.2
-            });
-
-            if (markerEl) markerEl.style.animation = "";
-            map.getContainer().style.animation = "";
-            alertBox.classList.add("hidden");
-
-            alreadyAlerted = false;
-
-        } else {
-
-            geofence.setStyle({
-                color: "red",
-                fillColor: "#e74c3c",
-                fillOpacity: 0.3
-            });
-
-            if (markerEl) markerEl.style.animation = "blink 1s infinite";
-            map.getContainer().style.animation = "shake 0.5s";
-            alertBox.classList.remove("hidden");
-
-            if (!alreadyAlerted) {
-                alert("ALERTE : Capteur hors de la zone !");
-                alreadyAlerted = true;
-            }
-        }
-    }
-
-    map.whenReady(updateZoneStatus);
+    loadZonesFromDatabase(id_z);
 
     centerMarker.on("dragstart", function (e) {
         isDragging = true;
@@ -165,7 +104,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     centerMarker.on("drag", function (e) {
         geofence.setLatLng(e.target.getLatLng());
-        updateZoneStatus();
+        $coord_mouse = String(e.latlng);
+        
+        document.getElementById("x").innerHTML = "x = " + $coord_mouse.lat;
+        document.getElementById("y").innerHTML = "y = " +$coord_mouse.lng;
+
     });
 
     centerMarker.on("dragend", function (e) {
@@ -225,10 +168,9 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("btnRadius").onclick = function () {
         var newRadius = prompt("Nouveau rayon en mètres :", geofence.getRadius());
         if (!isNaN(newRadius) && newRadius > 0) {
+            document.getElementById("r").innerHTML = "Radius = " + newRadius;
             geofence.setRadius(Number(newRadius));
-            updateZoneStatus();
             saveZoneToDatabase();
         }
     };
 
-});
