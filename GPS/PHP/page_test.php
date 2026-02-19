@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../CSS/style.css" />
+    <link rel="stylesheet" href="../CSS/style_modif_zone.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
     crossorigin=""/>
@@ -27,10 +28,6 @@
             echo "An error occurred.\n";
         exit;
         }
-        
-        if ($_SESSION['droit'] == "ajouter"){
-            header('Location: '."page_ajout.php");;
-        }
     ?>
     <script>
         function affiche_bandeau(){
@@ -47,6 +44,9 @@
                 <?php
                 if ($_SESSION['droit'] != "voir"){
                     echo'document.getElementById("btn_adj_donnees").style.display="block";';
+                }
+                if ($_SESSION['droit'] != "ajouter"){
+                    echo'document.getElementById("visualiser").style.display="block";';
                 }
                 ?>
             }
@@ -80,10 +80,12 @@
                         <input type="button" id="deco" value="déconnexion" onclick="deco()">
                     </li>
                     <li class="sous_menus" id="mon_compte"><p><a href="page_compte.php">Mon compte</a></p></li>
+                    <li class="sous_menus" id="visualiser">
+                        <p><a href="page.php">Visualiser</a></p>
+                    </li>
                     <li class="sous_menus" id="modifier">
                         <p>Ajouter/Modifier</p>
                         <ul class="element_modifier">
-                            <li><a href="#">Zones</a></li>
                             <li><a href="page_modif_capteur.php">Capteur</a></li>
                             <li><a href="page_ajout.php" id="btn_adj_donnees">Données</a></li>
                         </ul>
@@ -101,6 +103,7 @@
             </script>
             <label for="zone">Choisissez une zone :</label>
             <select id="zone" name="zone" onchange="envoie_zone()">
+                <option value="nouveau">Nouvelle zone</option>
                 <?php
                 $sql_cap = pg_query($db_connection, "SELECT * FROM zones ORDER BY id_zone");
                 
@@ -120,27 +123,71 @@
                 }
                 ?>
             </select>
+            <div id='renommer'>
+                <?php
+                    echo('<input type="text" name="nouveau_nom" id="nouveau_nom" placeholder="');
+                    if($id_zone == "nouveau"){
+                        echo('Nom de la zone');
+                    }else{
+                        echo('Nouveau nom');
+                    }
+                    echo('">');
+                    
+                    if($id_zone != "nouveau"){
+                        echo('<input type="button" value="');
+                        echo('Renommer');
+                        echo('" id="btn_renommer" class="bouton" Onclick="saveZoneToDatabase(\'nom\')">');
+                    }
+                    
+                ?>
+                
+            </div>
+            <div id="zone_btn">
+                <?php
+                    echo('<input type="button" class="bouton" id="btn_add" value="');
+                    if($id_zone =="nouveau"){
+                        echo('Ajouter');
+                        echo('" Onclick="saveZoneToDatabase(\'nom\')">');
+                    }
+                    else{
+                        echo('Modifier');
+                        echo('" Onclick="saveZoneToDatabase(\'pas_nom\')">');
+                    }
+                    
+                ?>
+                <input type="submit" value="Réinitialiser">
+            </div>
             
-            <input type="submit" value="Réinitialiser">
         </form>
         <?php
         
-        $sql = pg_query($db_connection, "SELECT * FROM zones WHERE id_zone = '$id_zone' ORDER BY id_zone");
-        
-        $premier = 0;
-        while ($row = pg_fetch_row($sql)) {
-            $x = $row[3];
-            $y = $row[2];
+        if($id_zone !="nouveau"){
+            $sql = pg_query($db_connection, "SELECT * FROM zones WHERE id_zone = '$id_zone' ORDER BY id_zone");
+            
+            while ($row = pg_fetch_row($sql)) {
+                $x = $row[3];
+                $y = $row[2];
+                echo ("<script>
+                    var id_z =".$row[0].";
+                    var lat_cookie =".$row[2].";
+                    var lng_cookie =".$row[3].";
+                    var radius_cookie =".$row[4].";
+                </script>");
+                
+                echo '<div class="donnees"><p class="coordonnees" id="x">x = ' . htmlspecialchars($row[2]) . '</p><p class="coordonnees" id="y">y = ' . htmlspecialchars($row[3]) . '</p><p class="coordonnees" id="r">Radius = ' . htmlspecialchars($row[4]) . '</p></div>';
+                
+            }
+        }else{
             echo ("<script>
-                var id_z =".$row[0].";
-                var lat_cookie =".$row[2].";
-                var lng_cookie =".$row[3].";
-                var radius_cookie =".$row[4].";
-            </script>");
-            
-            echo '<div class="donnees"><p class="coordonnees" id="x">x = ' . htmlspecialchars($row[2]) . '</p><p class="coordonnees" id="y">y = ' . htmlspecialchars($row[3]) . '</p><p class="coordonnees" id="r">Radius = ' . htmlspecialchars($row[4]) . '</p></div>';
-            
+                    var id_z;
+                    var lat_cookie = 47.306055;
+                    var lng_cookie = 2.540039;
+                    var radius_cookie =40000;
+                </script>");
+                
+                echo '<div class="donnees"><p class="coordonnees" id="x">x = 47.306055</p><p class="coordonnees" id="y">y = 2.540039</p><p class="coordonnees" id="r">Radius = 40000</p></div>';
         }
+        
         
         ?>
         </style>
@@ -151,8 +198,8 @@
             crossorigin=""
         ></script>
     <script src="../JS/script_maps.js"></script>
-    
-    <script src="test/script_maps.js"></script>
+   
+    <script src="../JS/script_maps_up.js"></script>
     </div>
 </body>
 </html>
