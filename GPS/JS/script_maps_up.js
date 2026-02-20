@@ -54,7 +54,7 @@
         
         console.log('Envoi zone:', zoneData);
         
-        fetch('test/api_zones.php', {
+        fetch('api_zones.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -97,7 +97,7 @@
     
     function loadZonesFromDatabase(id) {
         console.log('Chargement des zones...');
-        fetch('test/api_zones.php/?id=' + id, {
+        fetch('api_zones.php/?id=' + id, {
             method: 'GET'
         })
         .then(response => {

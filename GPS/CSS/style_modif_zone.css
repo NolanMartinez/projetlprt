@@ -17,3 +17,19 @@
 #zone_btn input{
     position: relative;
 }
+#nouveau_nom {
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 15px;
+    background: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 80%;
+    margin-right: 12px;
+}
+#nouveau_nom select:focus {
+    outline: none;
+    border-color: #2a5298;
+    box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.1);
+}

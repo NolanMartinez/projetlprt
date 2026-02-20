@@ -118,7 +118,7 @@
                     <li class="sous_menus" id="modifier">
                         <p>Ajouter/Modifier</p>
                         <ul class="element_modifier">
-                            <li><a href="#">Zones</a></li>
+                            <li><a href="page_modif_zone.php">Zones</a></li>
                             <li><a href="page_modif_capteur.php">Capteur</a></li>
                         </ul>
                     </li>
