@@ -174,7 +174,7 @@
                     var radius_cookie =".$row[4].";
                 </script>");
                 
-                echo '<div class="donnees"><p class="coordonnees" id="x">x = ' . htmlspecialchars($row[2]) . '</p><p class="coordonnees" id="y">y = ' . htmlspecialchars($row[3]) . '</p><p class="coordonnees" id="r">Radius = ' . htmlspecialchars($row[4]) . '</p></div>';
+                echo '<div class="donnees"><p class="coordonnees" id="x">x = <br>' . htmlspecialchars($row[2]) . '</p><p class="coordonnees" id="y">y = <br>' . htmlspecialchars($row[3]) . '</p><p class="coordonnees" id="r">Radius = <br>' . htmlspecialchars($row[4]) . '</p></div>';
                 
             }
         }else{
@@ -185,7 +185,7 @@
                     var radius_cookie =40000;
                 </script>");
                 
-                echo '<div class="donnees"><p class="coordonnees" id="x">x = 47.306055</p><p class="coordonnees" id="y">y = 2.540039</p><p class="coordonnees" id="r">Radius = 40000</p></div>';
+                echo '<div class="donnees"><p class="coordonnees" id="x">x = <br>47.306055</p><p class="coordonnees" id="y">y = <br>2.540039</p><p class="coordonnees" id="r">Radius = <br>40000</p></div>';
         }
         
         

@@ -139,8 +139,8 @@
         geofence.setLatLng(e.target.getLatLng());
         $coord_mouse = e.latlng;
         
-        document.getElementById("x").innerHTML = "x = " + $coord_mouse.lat;
-        document.getElementById("y").innerHTML = "y = " +$coord_mouse.lng;
+        document.getElementById("x").innerHTML = "x = <br>" + $coord_mouse.lat;
+        document.getElementById("y").innerHTML = "y = <br>" +$coord_mouse.lng;
 
     });
 
@@ -201,7 +201,7 @@
     document.getElementById("btnRadius").onclick = function () {
         var newRadius = prompt("Nouveau rayon en mètres :", geofence.getRadius());
         if (!isNaN(newRadius) && newRadius > 0) {
-            document.getElementById("r").innerHTML = "Radius = " + newRadius;
+            document.getElementById("r").innerHTML = "Radius = <br>" + newRadius;
             geofence.setRadius(Number(newRadius));
             //saveZoneToDatabase();
         }
